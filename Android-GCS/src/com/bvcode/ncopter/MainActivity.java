@@ -53,6 +53,7 @@ public class MainActivity extends Activity implements OnClickListener {
 //	private TextView extraInfo1;
 //	private TextView extraInfo2;
 //	private TextView extraInfo3;
+//  private TextView extraInfo4;
 	public MainActivity(){
 		
 	}
@@ -117,7 +118,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		//extraInfo3 = (TextView) findViewById(R.id.extraInfo3);
 		
 		ba.init();
-		//new XmlTask().execute(urlGet);
+		new XmlTask().execute(urlGet);
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
