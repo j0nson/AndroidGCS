@@ -628,8 +628,7 @@ public class CommunicationService extends Service {
         	//notification.vibrate = vibrate;
         	
         	//sound
-        	String alertSound = "file:///sdcard/media/audio/notifications/Autonote/facebook_ringtone_pop.m4a";
-        	notification.sound = Uri.parse(alertSound);
+        	notification.sound = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.pop);
         	notification.flags |= Notification.FLAG_ONGOING_EVENT;
         	
         	// Send the notification
