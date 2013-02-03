@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<LinearLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:orientation="vertical">
+
+		<Spinner android:id="@+id/spinner1" android:layout_width="fill_parent"
+			android:layout_height="wrap_content"></Spinner>
+		<Spinner android:id="@+id/spinner2" android:layout_width="fill_parent"
+			android:layout_height="wrap_content"></Spinner>
+
+		<LinearLayout android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:orientation="horizontal">
+		
+		<TextView
+		    android:id="@+id/Param1Title"
+		    android:layout_width="81dp"
+		    android:layout_height="wrap_content"
+		    android:text="Param 1" />
+		<TextView
+		    android:id="@+id/Param2Title"
+		    android:layout_width="81dp"
+		    android:layout_height="wrap_content"
+		    android:text="Param 2" />
+		<TextView
+		    android:id="@+id/Param3Title"
+		    android:layout_width="81dp"
+		    android:layout_height="wrap_content"
+		    android:text="Param 3" />
+		<TextView
+		    android:id="@+id/Param4Title"
+		    android:layout_width="81dp"
+		    android:layout_height="wrap_content"
+		    android:text="Param 4" />
+		</LinearLayout>
+		
+		<LinearLayout android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:orientation="horizontal">
+
+			<EditText android:text=" " android:id="@+id/Param1Value"
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:layout_weight="1" android:inputType="number" />
+			<EditText android:text=" " android:id="@+id/Param2Value"
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:layout_weight="1" android:inputType="number" />
+			<EditText android:text=" " android:id="@+id/Param3Value"
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:layout_weight="1" android:inputType="number" />
+			<EditText android:text=" " android:id="@+id/Param4Value"
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:layout_weight="1" android:inputType="number" />
+		</LinearLayout>
+
+		<TextView android:text="" android:layout_width="fill_parent"
+			android:layout_height="wrap_content" />
+
+		<TextView android:text="Position (X,Y,Z)"
+			android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+		<LinearLayout android:layout_width="match_parent"
+			android:layout_height="wrap_content" android:orientation="horizontal">
+			<EditText android:text=" " android:id="@+id/positionXValue"
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:layout_weight="1" android:inputType="number" />
+			<EditText android:text=" " android:id="@+id/positionYValue"
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:layout_weight="1" android:inputType="number" />
+			<EditText android:text=" " android:id="@+id/positionZValue"
+				android:layout_width="match_parent" android:layout_height="wrap_content"
+				android:layout_weight="1" android:inputType="number" />
+		</LinearLayout>
+
+		<LinearLayout android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:orientation="horizontal">
+			<CheckBox android:text="Current" android:id="@+id/checkBox1"
+				android:layout_width="wrap_content" android:layout_height="wrap_content" />
+			<CheckBox android:text="Auto-Continue" android:id="@+id/checkBox2"
+				android:layout_width="wrap_content" android:layout_height="wrap_content" />
+		</LinearLayout>
+
+
+	</LinearLayout>
+
+</merge>
+

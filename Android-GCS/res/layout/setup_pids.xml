@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="wrap_content" android:layout_width="fill_parent"
+	android:orientation="vertical">
+
+	<LinearLayout android:orientation="horizontal"
+		android:layout_height="wrap_content" android:layout_width="fill_parent">
+
+		<Button android:text="L" android:id="@+id/leftButton"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_weight="1" />
+		<Button android:text="Save" android:id="@+id/saveButton"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_weight="1" />
+
+		<Button android:text="R" android:id="@+id/rightButton"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_weight="1" />
+	</LinearLayout>
+
+	<ViewFlipper android:id="@+id/profileSwitcher"
+		android:layout_width="fill_parent" android:layout_height="fill_parent">
+		<!-- Acro Mode View -->
+		<ScrollView android:layout_width="match_parent"
+			android:layout_height="match_parent">
+			<LinearLayout android:layout_height="fill_parent"
+				android:id="@+id/linearLayout2" android:layout_width="fill_parent"
+				android:orientation="vertical">
+
+				<TextView android:text="Acro Mode" android:gravity="center_horizontal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+				<com.bvcode.ncopter.widgets.PIDWidget
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:id="@+id/acro_roll_pid" />
+				<com.bvcode.ncopter.widgets.PIDWidget
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:id="@+id/acro_pitch_pid" />
+				<com.bvcode.ncopter.widgets.PIDWidget
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:id="@+id/acro_yaw_pid" />
+				<!-- Transmitter factor? -->
+
+			</LinearLayout>
+		</ScrollView>
+		<!-- Stable Mode -->
+		<ScrollView android:layout_width="match_parent"
+			android:layout_height="match_parent">
+			<LinearLayout android:layout_height="fill_parent"
+				android:id="@+id/linearLayout1" android:layout_width="fill_parent"
+				android:orientation="vertical">
+
+				<TextView android:text="Stable Mode" android:gravity="center_horizontal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+				<com.bvcode.ncopter.widgets.PIDWidget
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:id="@+id/stable_roll_pid" />
+				<com.bvcode.ncopter.widgets.PIDWidget
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:id="@+id/stable_pitch_pid" />
+				<com.bvcode.ncopter.widgets.PIDWidget
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:id="@+id/stable_yaw_pid" />
+				<!-- KP rate -->
+				<CheckBox android:text="Magnetometer" android:id="@+id/checkBox1"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
+			</LinearLayout>
+		</ScrollView>
+		<!-- Position Hold -->
+		<ScrollView android:layout_width="match_parent"
+			android:layout_height="match_parent">
+			<LinearLayout android:layout_height="fill_parent"
+				android:id="@+id/linearLayout2" android:layout_width="fill_parent"
+				android:orientation="vertical">
+
+				<TextView android:text="Position Hold" android:gravity="center_horizontal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+				<com.bvcode.ncopter.widgets.PIDWidget
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:id="@+id/gps_roll_pid" />
+				<com.bvcode.ncopter.widgets.PIDWidget
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:id="@+id/gps_pitch_pid" />
+
+				<TextView android:text="" android:layout_width="fill_parent"
+					android:layout_height="wrap_content" />
+
+				<!-- Maximum Angle -->
+				<LinearLayout android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:orientation="horizontal">
+					<TextView android:text="Maximum Angle:  "
+						android:layout_width="150dip" android:layout_height="wrap_content" />
+					<EditText android:text="0.010" android:layout_width="fill_parent"
+						android:layout_height="wrap_content" />
+				</LinearLayout>
+
+				<!-- Geo Correction Factor -->
+				<LinearLayout android:layout_width="fill_parent"
+					android:layout_height="wrap_content" android:orientation="horizontal">
+					<TextView android:text="Geo Correction:  "
+						android:layout_width="150dip" android:layout_height="wrap_content" />
+					<EditText android:text="0.010" android:layout_width="fill_parent"
+						android:layout_height="wrap_content" />
+				</LinearLayout>
+
+
+			</LinearLayout>
+		</ScrollView>
+		<!-- Altitude Hold -->
+		<ScrollView android:layout_width="match_parent"
+			android:layout_height="match_parent">
+			<LinearLayout android:layout_height="fill_parent"
+				android:id="@+id/linearLayout2" android:layout_width="fill_parent"
+				android:orientation="vertical">
+
+				<TextView android:text="Altitude Hold" android:gravity="center_horizontal"
+					android:layout_width="fill_parent" android:layout_height="wrap_content" />
+
+				<com.bvcode.ncopter.widgets.PIDWidget
+					android:layout_width="fill_parent" android:layout_height="wrap_content"
+					android:id="@+id/alt_pid" />
+
+			</LinearLayout>
+		</ScrollView>
+	</ViewFlipper>
+
+</LinearLayout>
+
+

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="fill_parent" android:id="@+id/linearLayout1"
+	android:layout_width="fill_parent" android:orientation="vertical">
+
+	<TableRow>
+
+		<com.bvcode.ncopter.widgets.NumberPicker
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_weight="1" android:id="@+id/rollOffset" />
+		<com.bvcode.ncopter.widgets.NumberPicker
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_weight="1" android:id="@+id/pitchOffset"/>
+		<com.bvcode.ncopter.widgets.NumberPicker
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_weight="1" android:id="@+id/zOffset"/>
+
+	</TableRow>
+
+	<TableRow>
+
+		<TextView android:text="Roll: 0" android:layout_weight="1"
+			android:gravity="center_horizontal" android:id="@+id/rollValue" />
+		<TextView android:text="Pitch: 0" android:layout_weight="1"
+			android:gravity="center_horizontal" android:id="@+id/pitchValue"/>
+		<TextView android:text="Z: 240" android:layout_weight="1"
+			android:gravity="center_horizontal" android:id="@+id/zValue" />
+
+	</TableRow>
+	
+	<!--  Drift Direction offset -->
+	
+	<TableRow>
+		<TextView android:text="" android:layout_weight="1"
+			android:gravity="center_horizontal"  />
+		<Button android:text="Forwards" android:id="@+id/driftForward"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1" />			
+		<TextView android:text="" android:layout_weight="1"
+			android:gravity="center_horizontal"/>
+	</TableRow>
+	<TableRow>
+		<Button android:text="Left" android:id="@+id/driftLeft"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1" />			
+		<TextView android:text="Counter Drift" android:layout_weight="1"
+			android:gravity="center_horizontal"/>
+		<Button android:text="Right" android:id="@+id/driftRight"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1" />			
+	</TableRow>
+	<TableRow>
+		<TextView android:text="" android:layout_weight="1"
+			android:gravity="center_horizontal" />
+		<Button android:text="Backwards" android:id="@+id/driftBackwards"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1" />			
+		<TextView android:text="" android:layout_weight="1"
+			android:gravity="center_horizontal" />
+	</TableRow>
+	
+	
+	
+	<TableRow>
+		<TextView android:text="" />
+	</TableRow>
+	 
+	<TableRow android:id="@+id/linearLayout2"
+		android:layout_height="match_parent" android:orientation="horizontal"
+		android:layout_width="match_parent">
+		<Button android:text="Save Offsets" android:id="@+id/saveoffsets"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_weight="1" />
+	</TableRow>
+	
+	
+</TableLayout>
+
+

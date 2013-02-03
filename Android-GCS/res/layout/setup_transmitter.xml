@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_height="fill_parent" android:id="@+id/linearLayout1"
+	android:layout_width="fill_parent"
+	android:orientation="vertical">
+
+<com.bvcode.ncopter.widgets.MinMaxCurrentSlider
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:id="@+id/trans_Roll" />
+
+<com.bvcode.ncopter.widgets.MinMaxCurrentSlider
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:id="@+id/trans_Pitch" />
+
+<com.bvcode.ncopter.widgets.MinMaxCurrentSlider
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:id="@+id/trans_Yaw" />
+
+<com.bvcode.ncopter.widgets.MinMaxCurrentSlider
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:id="@+id/trans_Throttle" />
+
+<com.bvcode.ncopter.widgets.MinMaxCurrentSlider
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:id="@+id/trans_Mode" />
+				
+<com.bvcode.ncopter.widgets.MinMaxCurrentSlider
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:id="@+id/trans_Aux1" />
+
+<com.bvcode.ncopter.widgets.MinMaxCurrentSlider
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:id="@+id/trans_Aux2" />				
+<!-- Future Use			
+<com.android.ncopter.widgets.MinMaxCurrentSlider
+				android:layout_width="fill_parent" android:layout_height="wrap_content"
+				android:id="@+id/trans_Aux2" />
+				 -->
+<TextView android:text="" android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+
+<LinearLayout android:orientation="horizontal"	android:layout_height="wrap_content"	android:layout_width="fill_parent">
+	<TextView android:text="Mid: " android:id="@+id/midR" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1"/>
+	<TextView android:text="Mid: " android:id="@+id/midP" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1"/>
+	<TextView android:text="Mid: " android:id="@+id/midY" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1"/>
+</LinearLayout>
+
+<TextView android:text="" android:layout_height="wrap_content" android:layout_width="fill_parent"/>
+<!-- 
+<LinearLayout android:orientation="horizontal"
+		android:layout_height="wrap_content" 
+		android:layout_width="fill_parent">
+	<Button android:text="Start Calibration" android:id="@+id/reset" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1"/>
+	<Button android:text="Save Calibration" android:id="@+id/saveCalib" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1"/>
+	<Button android:text="Save Midpoints" android:id="@+id/saveMid" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1"/>
+</LinearLayout>
+ -->
+ 
+</LinearLayout>
+
+

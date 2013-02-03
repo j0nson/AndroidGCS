@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu  xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menuLoadMission" 
+    	  android:title="Get from UAV"></item>
+    <item android:id="@+id/menuSaveMission"
+    	  android:title="Save to UAV"></item>
+    <item android:id="@+id/menuEditMission" 
+    	  android:title="Edit List"></item>
+ 	<item android:id="@+id/menuClearMission" 
+    	  android:title="Clear"></item>
+ 	<item android:id="@+id/menuEnableEdit" 
+    	  android:title="@string/enableWPDrag"></item>
+ 	<item android:id="@+id/menuCommands" 
+    	  android:title="Send Command"></item>
+</menu>

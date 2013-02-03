@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu  xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <item android:id="@+id/menu_set_loiter" 
+    	  android:title="@string/enableLoiterSet"></item>
+   	<item android:id="@+id/menu_gcs_offset" 
+    	  android:title="@string/enableFollowMe"></item>
+   	
+</menu>

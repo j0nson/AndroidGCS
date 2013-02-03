@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Debug 09Jpvzi4idkcR6AAIhIzSjutOkv7F3xGqIPBj_g -->
+<!-- Release 09Jpvzi4idke8IaveQwGRJrNMPh-bcF1Ey3VAVw -->
+<RelativeLayout     xmlns:android="http://schemas.android.com/apk/res/android"
+					android:layout_width="match_parent" android:layout_height="match_parent">
+<com.google.android.maps.MapView
+    android:id="@+id/mapview"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:clickable="true"
+    android:apiKey="09Jpvzi4idkcR6AAIhIzSjutOkv7F3xGqIPBj_g"
+/>
+
+<ImageView android:id="@+id/drag" 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:src="@drawable/map_icon" 
+			android:visibility="gone"/>
+
+<TextView
+    android:id="@+id/mapMode"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentTop="true"
+    android:background="#5F000000"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:text="No Data"
+    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+<TextView
+    android:id="@+id/mapLastWP"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_below="@+id/mapMode"
+    android:background="#00000000"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:text=""
+    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+<TextView
+    android:id="@+id/mapNextWP"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentRight="true"
+    android:layout_below="@+id/mapLastWP"
+    android:background="#00000000"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:text=""
+    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</RelativeLayout>
+

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+  
+<!-- <TextView android:text="Status" android:textSize="30sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:gravity="center_horizontal"/> -->
+<TextView android:text="No Data Yet." android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line1"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line2"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line3"/>
+<TextView android:text="Press and hold text to refresh." android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line4"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line5"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line6"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line7"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line8"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line9"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line10"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line11"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line12"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line13"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line14"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line15"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line16"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line17"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line18"/>
+<TextView android:text="" android:textSize="20sp" android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/line19"/>
+</LinearLayout>

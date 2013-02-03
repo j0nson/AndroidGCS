@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, Setup!</string>
+    <string name="app_name">Android GCS</string>
+    
+     <!--  DeviceListActivity -->
+    <string name="scanning">scanning for devices</string>
+    <string name="select_device">select a device to connect</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
+    <string name="local_service_started">Local service has started</string>
+    <string name="local_service_label">Android GCS</string>
+	<string name="LogPath">/Arduplane</string>
+	<string name="connected">Connected</string>
+	<string name="linked">Active Link</string>
+	<string name="protocolSelected">Protocol Set</string>
+	<string name="deviceAvailable">Bridge not Available</string>
+	<string name="protocolError">No Protocol</string>
+	<string name="mavlinkError">Disconnected from UAV</string>
+	<string name="heartbeat">Heartbeat</string>
+	<string name="enableFollowMe">Enable Follow Mode</string>
+	<string name="disableFollowMe">Disable Follow Mode</string>
+	<string name="enableLoiterSet">Enable Goto Mode</string>
+	<string name="disableLoiterSet">Disable Goto Mode</string>
+	<string name="enableWPDrag">Enable WP Drag</string>
+	<string name="disableWPDrag">Disable WP Drag</string>
+	<string name="checkForUpdates">http://usubscription.com/copterGCS.php</string>
+	
+     <string-array name="mode_array">
+        <item>Manual</item>      
+        <item>Circle</item>
+        <item>Stabilize</item>
+        <item>Training</item>      
+        <item>Four</item>
+        <item>Fly by Wire A</item>
+        <item>Fly by Wire B</item>
+        <item>Seven</item>
+        <item>Eight</item>
+        <item>Nine</item>
+        <item>Auto</item>
+        <item>Return to Launch</item>
+        <item>Loiter</item>
+        <item>Guided</item>
+    </string-array>
+    <!-- 0	 Manual,1	 CIRCLE,2	 STABILIZE,3	 TRAINING,5	 FBWA,6	 FBWB,10	 Auto,11	 RTL,12	 Loiter,15	 Guided -->
+    <string-array name="battery_modes">
+        <item>Disabled</item>      
+        <item>3 Cell</item>
+        <item>4 Cell</item>
+        <item>Battery Volts</item>
+        <item>Volts and Current</item>        
+    </string-array>
+    
+    
+</resources>

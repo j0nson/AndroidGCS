@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent" android:layout_height="match_parent"
+	android:orientation="vertical">
+
+	<CheckBox android:text="Enable Compass" android:id="@+id/hardware_compass"
+		android:layout_width="wrap_content" android:layout_height="wrap_content" />
+
+<LinearLayout	 android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+	<TextView android:text="Declination (Deg)" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_marginRight="20dip"/>
+	<EditText android:id="@+id/hardware_decl" android:layout_width="match_parent" android:layout_height="wrap_content" 	android:numeric="decimal" />
+</LinearLayout>
+	
+	<Spinner android:id="@+id/hardware_batt_spin" android:layout_width="fill_parent"
+		android:layout_height="wrap_content"></Spinner>
+
+<LinearLayout	 android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+	<TextView android:text="Capacity" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_marginRight="20dip"/>
+	<EditText android:id="@+id/hardware_batt_cap" android:layout_width="match_parent" android:layout_height="wrap_content" 	android:numeric="decimal"  />
+</LinearLayout>
+	
+			
+	<CheckBox android:text="Enable Sonar" android:id="@+id/hardware_sonar"
+		android:layout_width="wrap_content" android:layout_height="wrap_content" />
+	
+	<CheckBox android:text="Enable Airspeed" android:id="@+id/hardware_airspeed"
+		android:layout_width="wrap_content" android:layout_height="wrap_content" />
+	
+	
+	<Button android:text="Save All" android:id="@+id/hardware_save"
+			android:layout_width="match_parent" android:layout_height="wrap_content"/>
+			
+</LinearLayout>
