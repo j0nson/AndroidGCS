@@ -116,7 +116,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		//extraInfo1 = (TextView) findViewById(R.id.extraInfo1);
 		//extraInfo2 = (TextView) findViewById(R.id.extraInfo2);
 		//extraInfo3 = (TextView) findViewById(R.id.extraInfo3);
-		
+		//extraInfo3 = (TextView) findViewById(R.id.extraInfo3);
 		ba.init();
 		new XmlTask().execute(urlGet);
 	}
