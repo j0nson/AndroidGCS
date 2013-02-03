@@ -93,7 +93,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 		readouts = (Button) findViewById(R.id.readoutsButton);
 		readouts.setOnClickListener(this);
-
+  
 		status = (Button) findViewById(R.id.statusButton);
 		status.setOnClickListener(this);
 
@@ -116,7 +116,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		//extraInfo1 = (TextView) findViewById(R.id.extraInfo1);
 		//extraInfo2 = (TextView) findViewById(R.id.extraInfo2);
 		//extraInfo3 = (TextView) findViewById(R.id.extraInfo3);
-		//extraInfo3 = (TextView) findViewById(R.id.extraInfo3);
+
 		ba.init();
 		new XmlTask().execute(urlGet);
 	}
