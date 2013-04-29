@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="com.bvcode.ncopter" 
-      android:versionName="10.02"
+      android:versionName="10.05"
       android:versionCode="10">
     
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="8"/>
@@ -18,33 +18,34 @@
     <application android:label="@string/app_name" android:icon="@drawable/icon" android:allowBackup="true">
        
         <activity android:name="MainActivity"
-                  android:label="@string/app_name"
-                  android:screenOrientation="portrait">
+            	android:launchMode="singleTop"
+				android:label="@string/app_name"
+				android:screenOrientation="sensor">
  
-		<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+				<intent-filter>
+                	<action android:name="android.intent.action.MAIN" />
+                	<category android:name="android.intent.category.LAUNCHER" />
+            	</intent-filter>
 		</activity>            
 
 		<!-- Setup activities -->
-		<activity android:name="com.bvcode.ncopter.CLIActivity" android:label="Android GCS - CLI" android:screenOrientation="portrait"/>
-		<activity android:name="com.bvcode.ncopter.ModeSelectionActivity" android:label="Android GCS - Mode Selection" android:screenOrientation="portrait"/>
-		<activity android:name="com.bvcode.ncopter.setup.SetupActivity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"/>
-		<activity android:name="com.bvcode.ncopter.setup.SetupPIDSActivity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"/>
-		<activity android:name="com.bvcode.ncopter.setup.SetupTransmitterActivity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"/>
-		<activity android:name="com.bvcode.ncopter.setup.SetupOffsetsActivity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"/>
-		<activity android:name="com.bvcode.ncopter.setup.SetupHardwareActivity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"/>
-		<activity android:name="ReadOutsActivity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="landscape"/>
-		<activity android:name="StatusActivity" android:label="Android GCS - Status" android:screenOrientation="sensor"/>
-		<activity android:name="ParameterViewActivity" android:label="Android GCS - Parameters" android:screenOrientation="portrait"/>
-		<activity android:name="HUDActivity"  android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="landscape"/>
-		<activity android:name="com.bvcode.ncopter.gps.GPSActivity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="sensor"/>
-		<activity android:name="com.bvcode.ncopter.mission.MissionActivity" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="sensor"/>
-		<activity android:name="com.bvcode.ncopter.mission.MissionListActivity" android:label="Android GCS - Mission" android:screenOrientation="sensor"/>
-	
+		<activity android:name="com.bvcode.ncopter.CLIActivity" android:launchMode="singleTop" android:label="Android GCS - CLI" android:screenOrientation="portrait"/>
+		<activity android:name="com.bvcode.ncopter.ModeSelectionActivity" android:launchMode="singleTop" android:label="Android GCS - Mode Selection" android:screenOrientation="portrait"/>
+		<activity android:name="com.bvcode.ncopter.setup.SetupActivity" android:launchMode="singleTop" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"/>
+		<activity android:name="com.bvcode.ncopter.setup.SetupPIDSActivity" android:launchMode="singleTop" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"/>
+		<activity android:name="com.bvcode.ncopter.setup.SetupTransmitterActivity" android:launchMode="singleTop" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"/>
+		<activity android:name="com.bvcode.ncopter.setup.SetupOffsetsActivity" android:launchMode="singleTop" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"/>
+		<activity android:name="com.bvcode.ncopter.setup.SetupHardwareActivity" android:launchMode="singleTop" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="portrait"/>
+		<activity android:name="ReadOutsActivity" android:launchMode="singleTop" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="landscape"/>
+		<activity android:name="StatusActivity" android:launchMode="singleTop" android:label="Android GCS - Status" android:screenOrientation="sensor"/>
+		<activity android:name="ParameterViewActivity" android:launchMode="singleTop" android:label="Android GCS - Parameters" android:screenOrientation="portrait"/>
+		<activity android:name="HUDActivity"  android:launchMode="singleTop" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="landscape"/>
+		<activity android:name="com.bvcode.ncopter.gps.GPSActivity" android:launchMode="singleTop" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="sensor"/>
+		<activity android:name="com.bvcode.ncopter.mission.MissionActivity" android:launchMode="singleTop" android:theme="@android:style/Theme.NoTitleBar" android:screenOrientation="sensor"/>
+		<activity android:name="com.bvcode.ncopter.mission.MissionListActivity" android:launchMode="singleTop" android:label="Android GCS - Mission" android:screenOrientation="sensor"/>
+		<activity android:name="com.bvcode.ncopter.widgets.ttsOptionsWidget" android:launchMode="singleTop" android:label="Android GCS - Options" android:screenOrientation="portrait"/>
 		
-		<activity android:name="com.bvcode.ncopter.comms.DeviceListActivity" android:screenOrientation="portrait"/>
+		<activity android:name="com.bvcode.ncopter.comms.DeviceListActivity" android:launchMode="singleTop" android:screenOrientation="portrait"/>
 		<!-- <activity android:name="USBDeviceListActivity" android:screenOrientation="portrait"/> -->
 		
 		<service android:name="com.bvcode.ncopter.comms.CommunicationService"/>

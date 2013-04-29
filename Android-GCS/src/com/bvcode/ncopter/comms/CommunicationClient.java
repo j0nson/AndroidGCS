@@ -163,7 +163,7 @@ public abstract class CommunicationClient{
 	public void sendBytesToComm(byte[] b){
 
 		if(b == null){
-			Log.d("Communication Client", "B is Null");
+			//Log.d("Communication Client", "B is Null");
 			return;
 		}
 		
@@ -177,12 +177,12 @@ public abstract class CommunicationClient{
 			
 			if(mService != null)
 				mService.send(msg);
-			else
-				Log.d("Communication Client", "Attempting to Send message with mService == null");
+			//else
+				//Log.d("Communication Client", "Attempting to Send message with mService == null");
 			
 		} catch (RemoteException e) {
 			e.printStackTrace();
-		}		
+		}
 	}
 
 	public void init() {

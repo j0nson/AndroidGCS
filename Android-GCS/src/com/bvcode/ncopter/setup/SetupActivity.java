@@ -3,6 +3,7 @@ package com.bvcode.ncopter.setup;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.widget.TabHost;
 
@@ -16,7 +17,9 @@ public class SetupActivity extends TabActivity {
         super.onCreate(savedInstanceState);
 		if( CommonSettings.setOrientation(this, -1))
 			return;
-
+		//set audio stream controls
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+				
         setTitle("Setup");
         
         Resources res = getResources();

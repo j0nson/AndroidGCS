@@ -3,11 +3,14 @@ package com.bvcode.ncopter.widgets;
 import java.lang.reflect.Field;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -19,10 +22,12 @@ import com.MAVLink.MAVLink.MAV_FRAME;
 import com.MAVLink.Messages.IMAVLinkMessage;
 import com.MAVLink.Messages.common.msg_waypoint;
 import com.bvcode.ncopter.R;
+import com.bvcode.ncopter.mission.MissionActivity;
+import com.bvcode.ncopter.setup.SetupActivity;
 
-public class MissionWidget extends TableLayout {
+public class MissionWidget extends TableLayout implements OnClickListener {
 	msg_waypoint msg;
-
+	
 	AttributeSet attrs;
 
 	Spinner command;
@@ -33,6 +38,8 @@ public class MissionWidget extends TableLayout {
 	
 	EditText param1, param2, param3, param4, posX, posY, posZ;
 	
+	Button button1;
+	
 	CheckBox current, autoContinue;
 	
 	public MissionWidget(Context context, AttributeSet attrs) {
@@ -40,11 +47,15 @@ public class MissionWidget extends TableLayout {
 		this.attrs = attrs;
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		inflater.inflate(R.layout.mission_widget, this, true);
-	
+		
+		button1 = (Button) findViewById(R.id.button1);
+		button1.setOnClickListener(this);
+		
 		param1 = (EditText) findViewById(R.id.Param1Value);
 		param2 = (EditText) findViewById(R.id.Param2Value);
 		param3 = (EditText) findViewById(R.id.Param3Value);
 		param4 = (EditText) findViewById(R.id.Param4Value);
+				
 		posX = (EditText) findViewById(R.id.positionXValue);
 		posY = (EditText) findViewById(R.id.positionYValue);
 		posZ = (EditText) findViewById(R.id.positionZValue);
@@ -58,6 +69,10 @@ public class MissionWidget extends TableLayout {
 		
 		Field[] field = MAV_CMD.class.getFields();
 	    for (Field f : field) {
+	    	//String tmp = f.getName();
+	    	//tmp = tmp.replace("MAV_CMD", "");
+	    	//tmp = tmp.replace("NAV_", "");
+	    	//tmp = tmp.replace("_", " ");
 	    	commandAdapter.add(f.getName());
 		}
 
@@ -115,7 +130,7 @@ public class MissionWidget extends TableLayout {
 		    }
 		    public void onNothingSelected(AdapterView<?> parent) {
 		    }
-		});		
+		});	
 	}
 
 	
@@ -137,14 +152,14 @@ public class MissionWidget extends TableLayout {
 	public void setPacket(IMAVLinkMessage imavLinkMessage) {
 		msg = (msg_waypoint) imavLinkMessage;
 		
-		param1.setText( msg.param1 + " ");
-		param2.setText( msg.param2 + " ");
-		param3.setText( msg.param3 + " ");
-		param4.setText( msg.param4 + " ");
+		param1.setText( msg.param1 + "");
+		param2.setText( msg.param2 + "");
+		param3.setText( msg.param3 + "");
+		param4.setText( msg.param4 + "");
 		
-		posX.setText( msg.x + " ");
-		posY.setText( msg.y + " "); 
-		posZ.setText( msg.z + " ");
+		posX.setText( msg.x + "");
+		posY.setText( msg.y + ""); 
+		posZ.setText( msg.z + "");
 		
 		//TODO need to select the proper option in the menu
 		String cmd = MAVLink.getMavCmd( msg.command );
@@ -158,5 +173,11 @@ public class MissionWidget extends TableLayout {
 		current.setChecked( msg.current != 0);
 		autoContinue.setChecked( msg.autocontinue != 0);
 		
+	}
+
+	public void onClick(View v) {
+		if (v == button1) {
+			((MissionActivity)v.getContext()).setCurrentWP(msg.seq);
+		}
 	}
 }

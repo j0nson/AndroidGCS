@@ -124,9 +124,9 @@ public class HUD extends SurfaceView implements SurfaceHolder.Callback {
 	private void drawText(Canvas canvas) {
 		drawText(canvas, 2, "Next WP:  " + currentWP, statusText, true);
 		drawText(canvas, 1, "Last WP:  " + reachedWP, statusText, true);
-		drawText(canvas, 0, "Nav Mode: " + navMode,  statusText, true);
+		drawText(canvas, 0, "Mode: " + navMode,  statusText, true);
 			
-		drawText(canvas, 3, "Alt: " + altitude, statusText, false);
+		drawText(canvas, 3, "Alt: " + altitude + "m", statusText, false);
 		drawText(canvas, 2, gpsFix, statusText, false);
 		drawText(canvas, 1, remainBatt +"%", statusText, false);
 		drawText(canvas, 0, battVolt/1000.0 + "V", statusText, false);

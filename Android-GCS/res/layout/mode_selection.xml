@@ -2,66 +2,165 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent" android:layout_height="match_parent"
 	android:orientation="vertical" android:gravity="center">
+	<TableLayout
+	  	android:id="@+id/tableLayout1"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content" >
+	    <TableRow
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:weightSum="1.0" >
+        	<TextView android:text="Current Mode: " 
+	    		android:id="@+id/modeCurrentTitle"
+				android:layout_height="20dp" 
+				android:layout_width="0dp"
+				android:layout_weight=".5"
+				android:gravity="right" />
+        	<TextView android:text="" 
+	    		android:id="@+id/modeCurrentText"
+				android:layout_height="20dp" 
+				android:layout_width="0dp"
+				android:layout_weight=".5"
+				android:gravity="left" />
+    	</TableRow>
+    	<TableRow
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content"
+        	android:weightSum="1.0" >
+        	<TextView
+	    		android:id="@+id/modePWMTitle"
+	    		android:layout_width="0dp"
+	    		android:layout_weight=".5"
+	    		android:layout_height="20dp"
+	    		android:gravity="right"
+	    		android:text="Current PWM: " />
+        	<TextView
+	    		android:id="@+id/modePWM"
+	    		android:layout_width="0dp"
+	    		android:layout_weight=".5"
+	    		android:layout_height="20dp"
+	    		android:gravity="left"
+	    		android:text="" />
+    	</TableRow>
+    	<TableRow
+        	android:layout_width="wrap_content"
+        	android:layout_height="wrap_content" >
+        	<TextView
+         	   android:id="@+id/text1"
+         	   android:layout_width="wrap_content"
+         	   android:layout_height="wrap_content"
+         	   android:layout_marginRight="5dip"
+         	   android:layout_marginLeft="5dip"
+         	   android:text="Mode 1" />
 
-	<TableLayout android:layout_width="wrap_content"
-		android:layout_height="wrap_content" android:id="@+id/tableLayout2">
+       	 	<Spinner
+       	     	android:id="@+id/mode1"
+       	     	android:layout_width="fill_parent"
+       	     	android:layout_height="wrap_content"
+       	     	android:minWidth="120dp" />
 
-		<TableRow android:layout_width="wrap_content"
+        	<CheckBox
+				android:id="@+id/checkBox1"
+				android:text="Simple"
+				android:visibility="invisible" />
+    	</TableRow>
+	    <TableRow 
+	        android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
-			<TextView android:id="@+id/text1" android:text="Mode 0"
-				android:layout_height="wrap_content" android:layout_width="wrap_content"
-				android:layout_marginRight="20dip" />
-			<Spinner android:id="@+id/mode1" android:layout_width="fill_parent"
+			<TextView android:id="@+id/text2" 
+			    android:text="Mode 2"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:layout_marginRight="5dip"
+				android:layout_marginLeft="5dip" />
+
+			<Spinner
+			    android:id="@+id/mode2"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content"
+			    android:minWidth="180dp" ></Spinner>
+			<CheckBox
+			    android:id="@+id/checkBox2"
+			    android:text="Simple"
+			    android:visibility="invisible" />
+
+		</TableRow>
+		
+	    <TableRow 
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+			<TextView android:id="@+id/text3" 
+			    android:text="Mode 3"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:layout_marginRight="5dip" 
+				android:layout_marginLeft="5dip"/>
+			<Spinner android:id="@+id/mode3" 
+			    android:layout_width="fill_parent"
 				android:layout_height="wrap_content"></Spinner>
+			<CheckBox
+			    android:id="@+id/checkBox3"
+			    android:text="Simple" 
+			    android:visibility="invisible" />
+		</TableRow>
+		
+	    <TableRow 
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+			<TextView android:id="@+id/text4" 
+			    android:text="Mode 4"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:layout_marginRight="5dip" 
+				android:layout_marginLeft="5dip"/>
+			<Spinner android:id="@+id/mode4" 
+			    android:layout_width="fill_parent"
+				android:layout_height="wrap_content"></Spinner>
+			<CheckBox
+			    android:id="@+id/checkBox4"
+			    android:text="Simple" 
+			    android:visibility="invisible" />
+		</TableRow>
+		
+	    <TableRow 
+	        android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+			<TextView android:id="@+id/text5" 
+			    android:text="Mode 5"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:layout_marginRight="5dip" 
+				android:layout_marginLeft="5dip"/>
+			<Spinner android:id="@+id/mode5" 
+			    android:layout_width="fill_parent"
+				android:layout_height="wrap_content"></Spinner>
+			<CheckBox
+			    android:id="@+id/checkBox5"
+			    android:text="Simple" 
+			    android:visibility="invisible" />
+		</TableRow>
+		
+		<TableRow 
+		    android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+			<TextView android:id="@+id/text6" 
+			    android:text="Mode 6"
+				android:layout_height="wrap_content" 
+				android:layout_width="wrap_content"
+				android:layout_marginRight="5dip" 
+				android:layout_marginLeft="5dip"/>
+			<Spinner android:id="@+id/mode6" 
+			    android:layout_width="fill_parent"
+				android:layout_height="wrap_content"></Spinner>
+			<CheckBox
+			    android:id="@+id/checkBox6"
+			    android:text="Simple" 
+			    android:visibility="invisible" />
 		</TableRow>
 
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<TextView android:id="@+id/text2" android:text="Mode 1"
-				android:layout_height="wrap_content" android:layout_width="wrap_content"
-				android:layout_marginRight="20dip" />
-			<Spinner android:id="@+id/mode2" android:layout_width="fill_parent"
-				android:layout_height="wrap_content"></Spinner>
-		</TableRow>
-
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<TextView android:id="@+id/text3" android:text="Mode 2"
-				android:layout_height="wrap_content" android:layout_width="wrap_content"
-				android:layout_marginRight="20dip" />
-			<Spinner android:id="@+id/mode3" android:layout_width="fill_parent"
-				android:layout_height="wrap_content"></Spinner>
-		</TableRow>
-
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<TextView android:id="@+id/text4" android:text="Mode 3"
-				android:layout_height="wrap_content" android:layout_width="wrap_content"
-				android:layout_marginRight="20dip" />
-			<Spinner android:id="@+id/mode4" android:layout_width="fill_parent"
-				android:layout_height="wrap_content"></Spinner>
-		</TableRow>
-
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<TextView android:id="@+id/text5" android:text="Mode 4"
-				android:layout_height="wrap_content" android:layout_width="wrap_content"
-				android:layout_marginRight="20dip" />
-			<Spinner android:id="@+id/mode5" android:layout_width="fill_parent"
-				android:layout_height="wrap_content"></Spinner>
-		</TableRow>
-
-		<TableRow android:layout_width="wrap_content"
-			android:layout_height="wrap_content">
-			<TextView android:id="@+id/text6" android:text="Mode 5"
-				android:layout_height="wrap_content" android:layout_width="wrap_content"
-				android:layout_marginRight="20dip" />
-			<Spinner android:id="@+id/mode6" android:layout_width="fill_parent"
-				android:layout_height="wrap_content"></Spinner>
-		</TableRow>
 	</TableLayout>
 
-	<TextView android:text="Not Loaded" android:id="@+id/modeIndicator"
+	<TextView android:text="" android:id="@+id/modeIndicator"
 		android:layout_height="wrap_content" android:layout_width="match_parent"
 		android:gravity="center" />
 

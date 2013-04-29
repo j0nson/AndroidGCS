@@ -2,11 +2,14 @@ package com.bvcode.ncopter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.Button;
@@ -51,7 +54,9 @@ public class ReadOutsActivity extends Activity implements OnLongClickListener, O
 			return;
 
 		setContentView(R.layout.readouts_main);
-			
+		//set audio stream controls
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+				
 		scope = (ScopeDisplay) findViewById(R.id.scope);
 		scope.setOnLongClickListener(this);
 
@@ -79,7 +84,11 @@ public class ReadOutsActivity extends Activity implements OnLongClickListener, O
         
         ba.init();
         setupOverlay();
-    
+        
+        SharedPreferences settings = getSharedPreferences(CommunicationClient.PREFS_NAME, 0);
+      	if ( settings.getBoolean(getString(R.string.keepScreenOn), true) ){
+      		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+      	}
 	}
 
 	void setupOverlay(){

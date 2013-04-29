@@ -8,6 +8,12 @@
    	
     <item android:id="@+id/menuConnect" 
     	  android:title="Connect to Bridge"></item>
+    <item android:id="@+id/ttsOptions" 		
+          android:title="Settings"></item>
+    <item android:id="@+id/exit" 		
+          android:title="Exit"></item>
+   
+    <!-- 
    	<group android:id="@+id/group1">
         <item android:id="@+id/item1" android:title="Setup">
             <menu>
@@ -15,7 +21,9 @@
     			<item android:id="@+id/selectLink"	  	android:title="Select Link"></item>
                 <item android:id="@+id/lockOrientation" android:title="Lock Orientation"></item>
                 <item android:id="@+id/clearDefaults" 	android:title="Forget Defaults"></item>
+                <item android:id="@+id/ttsOptions" 		android:title="Other Options"></item>
             </menu>
         </item>
-    </group>	  
+    </group>
+    -->	  
 </menu>

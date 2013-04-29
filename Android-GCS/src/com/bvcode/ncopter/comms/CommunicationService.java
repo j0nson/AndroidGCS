@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 import android.app.Activity;
 import android.app.Notification;
@@ -23,6 +25,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.TextView;
@@ -31,7 +35,13 @@ import android.widget.Toast;
 import com.MAVLink.MAVLink;
 import com.MAVLink.Messages.IMAVLinkMessage;
 import com.MAVLink.Messages.common.msg_gps_raw;
+import com.MAVLink.Messages.common.msg_gps_raw_int;
 import com.MAVLink.Messages.common.msg_heartbeat;
+import com.MAVLink.Messages.common.msg_param_request_list;
+import com.MAVLink.Messages.common.msg_param_value;
+import com.MAVLink.Messages.common.msg_request_data_stream;
+import com.MAVLink.Messages.common.msg_statustext;
+import com.MAVLink.Messages.common.msg_sys_status;
 import com.MAVLink.Messages.common.msg_waypoint_current;
 import com.MAVLink.Messages.common.msg_waypoint_reached;
 import com.bvcode.ncopter.CommonSettings;
@@ -48,9 +58,12 @@ import com.bvcode.ncopter.AC1Data.RawByte;
  * @author bart
  * 
  */
-public class CommunicationService extends Service {
+public class CommunicationService extends Service implements OnInitListener {
 	private NotificationManager mNM;
-
+	
+	private TextToSpeech tts;
+	//private boolean connected = false;
+	
 	ReceiveThread receive = null;
 	
 	// Messenging
@@ -73,8 +86,12 @@ public class CommunicationService extends Service {
     
 	public String lastString = "";
 	public int cmdRecvCount;
-
-	private FileWriter fw = null;
+	public long lastBatteryWarning;
+	
+	public int nextWaypoint = 0;
+	
+	private FileWriter kml = null;
+	private FileWriter tlog = null;
 	
     ICommunicationModule module = null;
     
@@ -145,40 +162,50 @@ public class CommunicationService extends Service {
      * @param s
      */
 	public void sendString( byte[] s){
-		
 		try {
 			if(module.isConnected() && s != null){
-				
 				if( CommonSettings.isProtocolAC1() )
 					clearToSend = false;
-				
 				module.write(s);
-				
 				if( CommonSettings.isProtocolAC1() )
 					lastString = new String(s);
-				
 				cmdRecvCount = 0;
-				
 			}else{
-				notifyDeviceDisconnected();
-				
+				notifyDeviceDisconnected();	
 			}
 		} catch (IOException e) {
 			notifyDeviceDisconnected();
-			
 		}
 			
 	}
-
+	/*
 	private Handler mHandler = new Handler();
 	Runnable r = new Runnable() {
-		
 		public void run() {
-			disconnect();
-			
+			//disconnect();
+			CommonSettings.CONNECTED = false;
+			nHandler.removeCallbacks(reconnect);
+			nHandler.postDelayed(reconnect, 10000);
 		}
 	};
-	
+	*/
+	private Handler nHandler = new Handler();
+	Runnable reconnect = new Runnable(){
+		public void run(){
+			CommonSettings.CONNECTED = false;
+			SharedPreferences settings = getSharedPreferences(CommunicationClient.PREFS_NAME, 0);
+			if ( settings.getBoolean(getString(R.string.speakConnectionStatus), true) ){
+				tts.speak("No Connection", TextToSpeech.QUEUE_FLUSH, null);
+			}
+			//final Handler handler = new Handler();
+			//handler.postDelayed(new Runnable() {
+			//	public void run() {
+			//		nHandler.removeCallbacks(reconnect);
+			//		nHandler.postDelayed(reconnect, 10000);
+			//	}
+			//}, 10000);//ms
+		}
+	};
 	private class ReceiveThread extends Thread{
 		//InputStream in;
 		public boolean running;
@@ -241,7 +268,7 @@ public class CommunicationService extends Service {
 																	
 									}
 				    			}else if (CommonSettings.isProtocolMAVLink()){
-				    				// Use the MAVLink protocol
+				    				//Use the MAVLink protocol
 				    				//Log.d("Receiving", "-");
 				    				IMAVLinkMessage msg = MAVLink.receivedByte(b[0]);
 				    				read = 0; //just use the first element in the buffer, AC1 legacy
@@ -249,34 +276,114 @@ public class CommunicationService extends Service {
 				    				if( msg != null){
 				    					switch(msg.messageType){
 				    						case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:{
-				    							mHandler.removeCallbacks(r);
-				    							mHandler.postDelayed(r, 5000);
-				    					    
+				    							CommonSettings.HEARTBEAT_TIME = System.currentTimeMillis();
 				    							msg_heartbeat msg1 = (msg_heartbeat) msg;
+				    							if (CommonSettings.CONNECTED == false){
+				    								SharedPreferences settings = getSharedPreferences(CommunicationClient.PREFS_NAME, 0);
+				    								if ( settings.getBoolean(getString(R.string.speakConnectionStatus), true) ){
+				    									tts.speak("Connected", TextToSpeech.QUEUE_FLUSH, null);
+				    								}
+				    								CommonSettings.uavType = msg1.type;
+				    								//nHandler.removeCallbacks(reconnect);
+				    								CommonSettings.CONNECTED = true;
+				    							}
+				    							//nHandler.removeCallbacks(reconnect);
+				    							//mHandler.removeCallbacks(r);
+				    							//mHandler.postDelayed(r, 5000);
+				    							
+				    							nHandler.removeCallbacks(reconnect);
+				    							nHandler.postDelayed(reconnect, 5000);
+				    							
 				    							if ((int)msg1.custom_mode != lastMode){
 				    								Resources res = getResources();
-				    								String[] mavModes = res.getStringArray(R.array.mode_array);
+				    								String[] mavModes = null;
+				    								if ( CommonSettings.uavType == 2){ //quad
+				    									mavModes = res.getStringArray(R.array.mode_array_copter);
+				    								}else { // if ( CommonSettings.uavType == 1){ //fixed wing
+				    									mavModes = res.getStringArray(R.array.mode_array);
+				    								}
 				    								//Log.d("Debug CommService: 259", String.valueOf(msg1.custom_mode));
+				    								
 				    								if ( msg1.custom_mode <= mavModes.length ){
+				    									SharedPreferences settings = getSharedPreferences(CommunicationClient.PREFS_NAME, 0);
+					    								if ( settings.getBoolean(getString(R.string.speakModeChange), true) ){
+					    									tts.speak(mavModes[(int)msg1.custom_mode] + ".", TextToSpeech.QUEUE_FLUSH, null);
+					    								}
 				    									showNotification("Mode Change: " + mavModes[(int)msg1.custom_mode], 1);	
 				    									lastMode = (int)msg1.custom_mode;
 				    								}
 				    							}
-				    							//showNotification("Heartbeat", 4);
+				    							break;
+				    						}
+				    						/*
+				    						case msg_param_value.MAVLINK_MSG_ID_PARAM_VALUE:{
+				    							msg_param_value msg1 = (msg_param_value)msg;
+				    							String name = MAVLink.convertIntNameToString(msg1.param_id);
+				    							if (name.startsWith("SIMPLE")){
+				    								String temp = Integer.toBinaryString((int)msg1.param_value);		    								
+				    							    while (temp.length() < 6){
+				    							    	temp = "0" + temp;
+				    							    }
+				    							    for (int i = 6; i > 0; i--){
+				    							    	CommonSettings.simpleModeArray[i] = (Integer.valueOf(temp.substring((i-1), i)) != 0);
+				    							    }
 				    							}
 				    							break;
+				    						}
+				    						*/
+				    						case msg_sys_status.MAVLINK_MSG_ID_SYS_STATUS:{
+				    							msg_sys_status m = (msg_sys_status) msg;
+				    							if ( m.voltage_battery < 9600 && ( System.currentTimeMillis() - lastBatteryWarning > 30000 )){
+				    								SharedPreferences settings = getSharedPreferences(CommunicationClient.PREFS_NAME, 0);
+				    								if ( settings.getBoolean(getString(R.string.speakLowBattery), true) ){
+				    									tts.speak("Low Battery", TextToSpeech.QUEUE_FLUSH, null);
+				    								}
+				    								lastBatteryWarning = System.currentTimeMillis();
+				    							}
+				    							break;
+				    						}
+				    						case msg_statustext.MAVLINK_MSG_ID_STATUSTEXT:{
+				    							msg_statustext m = (msg_statustext) msg;
+				    							String s = new String(m.text);
+				    							s = s.replaceAll("[^A-Za-z0-9 ]", "");
+				    							
+				    							if (s.contains("Ready to FLY")){
+				    								SharedPreferences settings = getSharedPreferences(CommunicationClient.PREFS_NAME, 0);
+				    								if ( settings.getBoolean(getString(R.string.speakLowBattery), true) ){
+				    									tts.speak("Ready to fly", TextToSpeech.QUEUE_FLUSH, null);
+				    								}
+				    								showNotification("Ready to fly", 1);
+				    							}
+				    							//for(char test : m.text){
+				    							//	Log.d("Received Status Text:", test);
+				    							//}
+			    								Log.d("Received Status Text:", s);
+			    								break;
+				    						}
 				    						case msg_waypoint_current.MAVLINK_MSG_ID_WAYPOINT_CURRENT:{
-				    							//msg_waypoint_current m = (msg_waypoint_current) msg;
-				    							//m.seq
+				    							msg_waypoint_current m = (msg_waypoint_current) msg;
+				    							if (m.seq != nextWaypoint){
+				    								SharedPreferences settings = getSharedPreferences(CommunicationClient.PREFS_NAME, 0);
+				    								if ( settings.getBoolean(getString(R.string.speakWaypointNext), true) ){
+				    									tts.speak("Next Waypoint, " + m.seq, TextToSpeech.QUEUE_FLUSH, null);
+				    								}
+				    								showNotification("Next Waypoint: " + m.seq, 1);
+				    								nextWaypoint = m.seq;
+				    							}
 				    							break;
 				    						}
 				    						case msg_waypoint_reached.MAVLINK_MSG_ID_WAYPOINT_REACHED:{
 				    							msg_waypoint_reached m = (msg_waypoint_reached) msg;
-				    							showNotification("Waypoint Reached: " + m.seq, 1);	
+				    							SharedPreferences settings = getSharedPreferences(CommunicationClient.PREFS_NAME, 0);
+			    								if ( settings.getBoolean(getString(R.string.speakWaypointReached), true) ){
+			    									tts.speak("Waypoint Reached, " + m.seq, TextToSpeech.QUEUE_FLUSH, null);
+			    								}
+				    							showNotification("Waypoint Reached: " + m.seq, 1);
 				    							break;
 				    						}
 				    					}
-				    					Log.d("received:", "" + msg.messageType);
+				    					//////////////////////////////////////////////////////////////////debug				    					
+				    					//Log.d("Received:", "" + msg.messageType + ": " + msg.getClass().getName());
 				    					notifyNewMessage(cmdRecvCount, msg);
 				    				}
 					    						
@@ -319,84 +426,55 @@ public class CommunicationService extends Service {
 			    }
 			} catch (RemoteException e) {
 				e.printStackTrace();
-			
-			}		
-			//saveRaw(s);
-			//saveGPS(s);
-		}
-		private void saveRaw(IMAVLinkMessage s){
-			try {
-				fw.write( System.currentTimeMillis() + ": " + s + "\n");
-			} catch (IOException e) {
-				e.printStackTrace();
+			}	
+			//tlog
+			//if (CommonSettings.tlog){
+			//	saveRaw(s);
+			//}
+			//save KML
+			if (CommonSettings.kmlLog){
+				saveGPS(s);
 			}
 		}
+		private void saveRaw(IMAVLinkMessage s){
+			//if ( byte b ){
+				try {
+					tlog.write( System.currentTimeMillis() + ": " + s + "\n");
+					//tlog.write( "" + s );
+				} catch (IOException e) { 
+					e.printStackTrace();
+				}
+			//}
+		}
 		private void saveGPS(IMAVLinkMessage s) {
-			//TODO clean up this function, combine the common functionality...
-			
-			if( CommonSettings.isProtocolAC1() ){
-				// Record the copter data.
-				if(s!=null && s.getClass().equals( GPSData.class)){
-					GPSData gd = (GPSData)s;
+			if( s.messageType == msg_gps_raw_int.MAVLINK_MSG_ID_GPS_RAW_INT){	
+				msg_gps_raw_int msg = (msg_gps_raw_int) s;
+				if( msg.fix_type > 1){
+					if (kml == null){
+						kmlLogSetup();
+					}
 					
 					//How much have we moved
 					float[] results = new float[1];
 					Location.distanceBetween( // in meters
 							lastLatitude, lastLongitude,
-							gd.latitude/1000000.0, gd.longitude/1000000.0,
+							(msg.lat/10000000.0), (msg.lon/10000000.0),
 							results);
-					
+						
 					// get the overall length, including altitude motion.
-					results[0] = (float) Math.sqrt( results[0]*results[0] + Math.pow(gd.altitude - lastAltiude, 2));
-					        
-					// Ensure we have moved no more than 3m.
-					if(fw != null && (results[0] > 3)){
-						try {
-							// Store the values
-							lastLatitude = gd.latitude/1000000 ;
-							lastLongitude = gd.longitude/1000000 ;
-							lastAltiude = gd.altitude;
-	
-							fw.write( lastLatitude + " " 
-									+ lastLongitude + " " 
-									+ lastAltiude + "\n");
-					
+					results[0] = (float) Math.sqrt( results[0]*results[0] + Math.pow((msg.alt/1000) - lastAltiude, 2));
+						        
+					// Ensure we have moved more than 3m.
+					if(kml != null && (results[0] > 3)){
+						// Store the values
+						lastLatitude = (msg.lat/10000000.0);
+						lastLongitude = (msg.lon/10000000.0);
+						lastAltiude = (msg.alt/1000);
 							
+						try {
+							kml.write( lastLongitude + "," + lastLatitude + "," + lastAltiude + " \n");
 						} catch (IOException e) {
 							e.printStackTrace();
-							
-						}				
-					}    						
-				}
-			}else if (CommonSettings.isProtocolMAVLink()){
-				if( s.messageType == msg_gps_raw.MAVLINK_MSG_ID_GPS_RAW){	
-					msg_gps_raw msg = (msg_gps_raw) s;
-					if( msg.fix_type > 1){
-						//How much have we moved
-						float[] results = new float[1];
-						Location.distanceBetween( // in meters
-								lastLatitude, lastLongitude,
-								msg.lat, msg.lon,
-								results);
-						
-						// get the overall length, including altitude motion.
-						results[0] = (float) Math.sqrt( results[0]*results[0] + Math.pow(msg.alt - lastAltiude, 2));
-						        
-						// Ensure we have moved more than 3m.
-						if(fw != null && (results[0] > 3)){
-							// Store the values
-							lastLatitude = msg.lat;
-							lastLongitude = msg.lon ;
-							lastAltiude = msg.alt;
-							
-							try {
-								fw.write( lastLatitude + " " 
-										+ lastLongitude + " " 
-										+ lastAltiude + "\n");
-								
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
 						}
 					}
 				}
@@ -431,9 +509,12 @@ public class CommunicationService extends Service {
 	public IBinder onBind(Intent intent) {				
 		return mMessenger.getBinder();
 	}
-	
+
     @Override
-    public void onCreate() {
+    public void onCreate() {	
+    	// tts
+    	tts = new TextToSpeech(this, this);
+    	
     	// which parser to use?
 		SharedPreferences settings = getSharedPreferences(CommunicationClient.PREFS_NAME, 0);
 		
@@ -446,7 +527,7 @@ public class CommunicationService extends Service {
 	        	CommonSettings.currentLink = CommonSettings.LINK_BLUETOOTH;
 	        	
 	    	//}else if(link.equals(ProtocolParser.LINK_USB_) && IProxy.isUSBSupported()){
-	    	///	module = new USBModule(this);
+	    	//	module = new USBModule(this);
 	    	//	ProtocolParser.currentLink = ProtocolParser.LINK_USB;
 	        	
 	    	}else{
@@ -495,55 +576,53 @@ public class CommunicationService extends Service {
         // Ensure that when the service starts we allow the client to reconnect
         // After a first request, don't bother the user.
         module.setFirstTimeEnableDevice(true);
-        module.setFirstTimeListDevices(true);
-
-        //-------------------------------------        
-        // Lets make sure we can access the SD card.
-	    String state = Environment.getExternalStorageState();
-	    if (Environment.MEDIA_MOUNTED.equals(state)) {
-	    	final Resources res = getResources();
-		    // Record the data
-		    File sdCard = Environment.getExternalStorageDirectory();
-		    
-		    // Just make sure our subdirectory exists
-		    File dir = new File(sdCard.getAbsolutePath() + res.getString(R.string.LogPath));
-		    if(! dir.exists())
-		    	dir.mkdir();
-		    
-		    // And open for writing
-		    try {
-		    	File file = new File(sdCard.getAbsolutePath() + res.getString(R.string.LogPath) + "/Log_" + System.currentTimeMillis() + ".txt");
-		    	fw = new FileWriter(file);
-			} catch (IOException e) {
-				fw = null;
-			}
-	    }	  
+        module.setFirstTimeListDevices(true);  
     }
-
-    @Override
+    //@Override
     public void onDestroy() {
+    	nHandler.removeCallbacks(reconnect);
+    	//shut down tts
+    	if (tts != null) {
+            tts.stop();
+            tts.shutdown();
+        }
+    	
         // Cancel the persistent notification.
         mNM.cancel(R.string.local_service_started);
         mNM.cancelAll();
 
 		disconnect();
-		try {			
-			if(fw != null)
-				fw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
-		final Resources res = getResources();
-		File sdCard = Environment.getExternalStorageDirectory();
-		File dir = new File(sdCard.getAbsolutePath() + res.getString(R.string.LogPath));
-		for ( File  child : dir.listFiles()){
-			if (child.length() == 0){
-		        //Toast.makeText(getApplicationContext(), "Deleting: " + child.getName(), Toast.LENGTH_LONG).show();
-				child.delete();
-			}
-			break;
-		}
 		
+		if(kml != null){
+			try {			
+				kml.write(	"</coordinates>\n" +
+							"</LineString>\n" +
+							"</Placemark>\n" + 
+							"</Document>\n" +
+							"</kml>\n");
+				kml.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(tlog != null){
+			try {			
+				tlog.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		//final Resources res = getResources();
+		//File sdCard = Environment.getExternalStorageDirectory();
+		//File dir = new File(sdCard.getAbsolutePath() + res.getString(R.string.LogPath));
+		//for ( File  child : dir.listFiles()){
+		//	if (child.length() < 425){
+			//if (child.length() == 0){
+		        //Toast.makeText(getApplicationContext(), "Deleting: " + child.getName(), Toast.LENGTH_LONG).show();
+				//child.delete();
+		//	}
+			//break;
+		//}
 	}
 
     public void connect(final String device) {
@@ -601,13 +680,13 @@ public class CommunicationService extends Service {
 	        mNM.cancelAll();
 	        
 			notifyDeviceDisconnected();
-	        
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
     	
     }
-    
+
     /**
      * Show a notification while this service is running.
      */
@@ -647,5 +726,103 @@ public class CommunicationService extends Service {
         	}
         	//Log.d("notification level2:", "" + notification.iconLevel);
         }
-    }   
+    }
+    public void kmlLogSetup(){
+	    String state = Environment.getExternalStorageState();
+	    if (Environment.MEDIA_MOUNTED.equals(state)) {
+	    	final Resources res = getResources();
+		    // Record the data
+		    File sdCard = Environment.getExternalStorageDirectory();
+		    
+		    // Just make sure our subdirectory exists
+		    File dir = new File(sdCard.getAbsolutePath() + res.getString(R.string.LogPath));
+		    if(! dir.exists())
+		    	dir.mkdir();
+		    
+		    // And open for writing
+		    final Calendar c = Calendar.getInstance();
+		    int mYear = c.get(Calendar.YEAR);
+		    int mMonth = c.get(Calendar.MONTH);
+		    int mDay = c.get(Calendar.DAY_OF_MONTH);
+		    int mMinute = c.get(Calendar.MINUTE);
+		    int mHour = c.get(Calendar.HOUR_OF_DAY);
+		    int mSecond = c.get(Calendar.SECOND);
+		    //System.currentTimeMillis()
+		    try {
+		    	File file = new File(sdCard.getAbsolutePath() + res.getString(R.string.LogPath) + "/Log_" + mYear + "-" + mMonth + "-" + mDay + "_" + mHour + mMinute + mSecond + ".kml");
+		    	kml = new FileWriter(file);
+		    	kml.write("<?xml version='1.0' encoding='UTF-8'?>\n"
+		    				+ "<kml xmlns='http://www.opengis.net/kml/2.2'>\n"
+		    				+ "<Document>\n"
+		    				+ "<Style id=\"arduplane\">\n"
+		    				+ "<LineStyle>\n"
+		    				+ "<width>5</width>\n"
+		    				+ "<color>7dff0000</color>\n"
+		    				+ "</LineStyle>\n"
+		    				+ "<PolyStyle>\n"
+		    				+ "<color>7f00ff00</color>\n"
+		    				+ "</PolyStyle>\n"
+		    				+ "</Style>\n"
+		    				+ "<Placemark>\n"
+		    				+ "<name>"  + mYear + "-" + mMonth + "-" + mDay + "_" + mHour + mMinute + "</name>\n"
+		    				+ "<styleUrl>#arduplane</styleUrl>\n"
+		    				+ "<LineString>\n"
+		    				+ "<tessellate>1</tessellate>\n"
+		    				+ "<extrude>1</extrude>\n"
+		    				+ "<altitudeMode>absolute</altitudeMode>\n"
+		    				+ "<coordinates>\n");
+			} catch (IOException e) {
+				kml = null;
+			}
+	    }	
+    }
+    public void tlogSetup(){
+	    String state = Environment.getExternalStorageState();
+	    if (Environment.MEDIA_MOUNTED.equals(state)) {
+	    	final Resources res = getResources();
+		    // Record the data
+		    File sdCard = Environment.getExternalStorageDirectory();
+		    
+		    // Just make sure our subdirectory exists
+		    File dir = new File(sdCard.getAbsolutePath() + res.getString(R.string.LogPath));
+		    if(! dir.exists())
+		    	dir.mkdir();
+		    
+		    // And open for writing
+		    final Calendar c = Calendar.getInstance();
+		    int mYear = c.get(Calendar.YEAR);
+		    int mMonth = c.get(Calendar.MONTH);
+		    int mDay = c.get(Calendar.DAY_OF_MONTH);
+		    int mMinute = c.get(Calendar.MINUTE);
+		    int mHour = c.get(Calendar.HOUR_OF_DAY);
+		    int mSecond = c.get(Calendar.SECOND);
+		    //System.currentTimeMillis()
+		    try {
+		    	File file = new File(sdCard.getAbsolutePath() + res.getString(R.string.LogPath) + "/" + mYear + "-" + mMonth + "-" + mDay + " " + mHour + "-" + mMinute + "-" + mSecond + ".tlog");
+		    	tlog = new FileWriter(file);
+			} catch (IOException e) {
+				tlog = null;
+			}
+	    }	
+    }
+    public void onInit(int status) {
+    	if (status == TextToSpeech.SUCCESS) {
+            int result = tts.setLanguage(Locale.US);
+            if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                Toast.makeText(this, "Language not supported", Toast.LENGTH_LONG).show();
+                Log.e("TTS", "Language is not supported");
+            }
+        } else {
+            Toast.makeText(this, "TTS Initilization Failed", Toast.LENGTH_LONG).show();
+            Log.e("TTS", "Initilization Failed");
+        }
+    }
+    /*
+    public void sendHeartbeat() {
+    	msg_heartbeat msg1 = new msg_heartbeat();
+    	msg1.type = MAVLink.MAV_TYPE.MAV_TYPE_GCS;
+    	msg1.autopilot = MAVLink.MAV_AUTOPILOT.MAV_AUTOPILOT_GENERIC;
+    	ba.sendBytesToComm(MAVLink.createMessage(msg1));
+    }
+    */
 }

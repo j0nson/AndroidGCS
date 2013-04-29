@@ -1,0 +1,17 @@
+<xml>
+	<item>
+		<mode>Stabilize</mode>
+		<id>0</id>
+		<modeText>Stabilize</modeText>
+	</item>
+	<item>
+		<mode>Circle</mode>
+		<id>1</id>
+		<modeText>Circle</modeText>
+	</item>
+	<item>
+		<mode>Auto</mode>
+		<id>10</id>
+		<modeText>Auto</modeText>
+	</item>
+</xml>

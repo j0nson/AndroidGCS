@@ -2,6 +2,7 @@ package com.bvcode.ncopter.setup;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
@@ -34,7 +35,9 @@ public class SetupTransmitterActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.setup_transmitter);
-		
+		//set audio stream controls
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+				
 		minMax = new MinMaxCurrentSlider[7];
 		
 		initBar(0, R.id.trans_Roll, "Roll");

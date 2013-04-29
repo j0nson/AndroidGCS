@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:text="" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/statusButton"
+            android:layout_height="wrap_content"
+            android:layout_width="0dip" 
+            android:layout_weight=".18"
+            android:text="Status" />
+
+        <Button
+            android:id="@+id/readoutsButton"
+            android:layout_width="0dip" 
+            android:layout_weight=".18"
+            android:layout_height="wrap_content"
+            android:text="Readouts" />
+
+        <Button
+            android:id="@+id/modeButton"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".18"
+            android:text="Mode" />
+        
+        <Button
+            android:id="@+id/buttonSetup"
+            android:layout_width="0dip" 
+            android:layout_weight=".18"
+            android:layout_height="wrap_content"
+            android:text="Setup" />
+
+        <Button
+            android:id="@+id/cliButton"
+            android:layout_width="0dip" 
+            android:layout_weight=".18"
+            android:layout_height="wrap_content"
+            android:text="Terminal" />
+
+        <Button
+            android:id="@+id/paramView"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight=".18"
+            android:text="Params" />
+        
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+	    <LinearLayout
+	        android:layout_width="150dp"
+	        android:layout_height="match_parent"
+	        android:orientation="vertical" >
+	
+	        <Button
+	            android:id="@+id/gpsButton"
+	            android:layout_width="fill_parent"
+	            android:layout_height="0dip" 
+	            android:layout_weight=".33"
+	            android:text="Guided Mode" />
+	
+	        <Button
+	            android:id="@+id/missionButton"
+	            android:layout_width="fill_parent"
+	            android:layout_height="0dip" 
+	            android:layout_weight=".33"
+	            android:text="Mission Planning" />
+	
+	        <Button
+	            android:id="@+id/hudButton"
+	            android:layout_width="fill_parent"
+	            android:layout_height="0dip" 
+	            android:layout_weight=".33"
+	            android:text="HUD" />
+	
+	    </LinearLayout>
+	
+	
+	
+		<LinearLayout
+	        android:layout_width="fill_parent"
+	        android:layout_height="match_parent"
+	        android:orientation="vertical" >
+			<TextView
+			    android:id="@+id/extraInfo1"
+			    android:layout_width="fill_parent"
+			    android:layout_height="30sp"
+			    android:maxLines="1"
+			    android:text=""
+			    android:textColor="#FFFFFF"
+			    android:textSize="12sp" />
+		
+		    <TextView
+		        android:id="@+id/extraInfo2"
+		        android:layout_width="fill_parent"
+		        android:layout_height="30sp"
+		        android:maxLines="1"
+		        android:text=""
+		        android:textColor="#FFFFFF"
+		        android:textSize="12sp" />
+		    
+		    <TextView
+		        android:id="@+id/extraInfo3"
+		        android:layout_width="fill_parent"
+		        android:layout_height="30sp"
+		        android:maxLines="1"
+		        android:text=""
+		        android:textColor="#FFFFFF"
+		        android:textSize="12sp" />
+		    
+		    <TextView
+		        android:id="@+id/extraInfo4"
+		        android:layout_width="fill_parent"
+		        android:layout_height="30sp"
+		        android:maxLines="1"
+		        android:text=""
+		        android:textColor="#FFFFFF"
+		        android:textSize="12sp" />
+		    
+		    <TextView
+		        android:id="@+id/extraInfo5"
+		        android:layout_width="fill_parent"
+		        android:layout_height="30sp"
+		        android:maxLines="1"
+		        android:text=""
+		        android:textColor="#FFFFFF"
+		        android:textSize="12sp" />
+		    
+		    <TextView
+		        android:id="@+id/connectLabel"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_gravity="center_horizontal"
+		        android:text="Not Connected"
+		        android:textColor="#FF0000"
+		        android:textSize="30sp" />
+	 	</LinearLayout>
+ 	</LinearLayout>
+</LinearLayout>

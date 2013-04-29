@@ -2,6 +2,7 @@ package com.bvcode.ncopter.setup;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,7 +36,9 @@ public class SetupHardwareActivity extends Activity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.setup_hardware);
-		
+		//set audio stream controls
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+				
 		// Setup Spinner
 		battery_spin = (Spinner) findViewById(R.id.hardware_batt_spin);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.battery_modes, android.R.layout.simple_spinner_item);

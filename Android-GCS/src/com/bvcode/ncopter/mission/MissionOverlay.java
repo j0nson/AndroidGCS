@@ -1,8 +1,10 @@
 package com.bvcode.ncopter.mission;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnDismissListener;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -19,6 +21,7 @@ import android.widget.RelativeLayout;
 import com.MAVLink.MAVLink;
 import com.MAVLink.Messages.common.msg_waypoint;
 import com.bvcode.ncopter.R;
+import com.bvcode.ncopter.widgets.MissionWidget;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
@@ -29,9 +32,7 @@ import com.google.android.maps.Projection;
 public class MissionOverlay extends ItemizedOverlay<OverlayItem> {
 	private Context mContext;
 	MissionActivity fContext;
-	
-	
-	
+	private MissionWidget currentMissionWidget = null;
 	// Dragging stuff.
 	private Drawable marker = null;
 	private msg_waypoint inDrag = null;
@@ -83,7 +84,7 @@ public class MissionOverlay extends ItemizedOverlay<OverlayItem> {
 				msg_waypoint e;
 	
 				// skip empty bubbles
-				//skip hom
+				// skip home
 				for (int i = 2; i < MissionActivity.getWaypointSize(); i++) {
 	
 					e = MissionActivity.getWaypoint(i - 1);
@@ -122,27 +123,46 @@ public class MissionOverlay extends ItemizedOverlay<OverlayItem> {
 	protected boolean onTap(int index) {
 
 		if(System.currentTimeMillis() - lastWaypointAdd > 1000){
-			final msg_waypoint p = MissionActivity.getWaypoint(index);
-	
-			AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-			if ( p.seq == 0 ){
+			Dialog dialog = new Dialog(mContext);
+	        currentMissionWidget = new MissionWidget(mContext, null);
+	        currentMissionWidget.setPacket( MissionActivity.getWaypoint(index));
+	        dialog.setContentView(currentMissionWidget);
+	        if ( index == 0 ){
 				dialog.setTitle("Home");
 			}else{ 
-				dialog.setTitle("Mission Item");
+				dialog.setTitle("Waypoint "+ index + " Edit");
 			}
-			if ( p.seq == 0 ){
-				dialog.setMessage("Waypoint " + p.seq + "\nType: " + MAVLink.getMavCmd(p.command) + "\nElevation: " + p.z + "m");
-			}else{
-				dialog.setMessage("Waypoint " + p.seq + "\nType: " + MAVLink.getMavCmd(p.command) + "\nAltitude: " + p.z + "m");
-				dialog.setPositiveButton("Goto Now", new DialogInterface.OnClickListener() {
-		            public void onClick(DialogInterface arg0, int arg1 ) {
-		            	//Log.d("On Click:", "" + p.seq);  
-		            	((MissionActivity)mContext).setCurrentWP(p.seq);
-		            }
-		        });
-			}
-			dialog.setNegativeButton("Dismiss", null);
+	        dialog.setCancelable(true);
 			dialog.show();
+			dialog.setOnDismissListener(new OnDismissListener() {
+		        public void onDismiss(final DialogInterface arg0) {
+		        	if(currentMissionWidget != null){
+		    			currentMissionWidget.saveData();
+		    			currentMissionWidget = null;
+		    		}
+		        }
+		    });
+			
+			//final msg_waypoint p = MissionActivity.getWaypoint(index);
+			//AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+			//if ( p.seq == 0 ){
+			//	dialog.setTitle("Home");
+			//}else{ 
+			//	dialog.setTitle("Mission Item");
+			//}
+			//if ( p.seq == 0 ){
+			//	dialog.setMessage("Waypoint " + p.seq + "\nType: " + MAVLink.getMavCmd(p.command) + "\nElevation: " + p.z + "m");
+			//}else{
+			//	dialog.setMessage("Waypoint " + p.seq + "\nType: " + MAVLink.getMavCmd(p.command) + "\nAltitude: " + p.z + "m");
+			//	dialog.setPositiveButton("Goto Now", new DialogInterface.OnClickListener() {
+		    //        public void onClick(DialogInterface arg0, int arg1 ) {
+		    //        	//Log.d("On Click:", "" + p.seq);  
+		    //        	((MissionActivity)mContext).setCurrentWP(p.seq);
+		    //        }
+		    //    });
+			//}
+			//dialog.setNegativeButton("Dismiss", null);
+			//dialog.show();
 		}
 		return true;
 	}
@@ -235,7 +255,7 @@ public class MissionOverlay extends ItemizedOverlay<OverlayItem> {
 
 		@Override
 		public void onLongPress(MotionEvent ev) {
-			
+			//set new waypoint
 			vibe(50);
 			
 			GeoPoint pt = map.getProjection().fromPixels((int)ev.getX(), (int)ev.getY());
@@ -260,7 +280,10 @@ public class MissionOverlay extends ItemizedOverlay<OverlayItem> {
     			msg.frame = MAVLink.MAV_FRAME.MAV_FRAME_GLOBAL_RELATIVE_ALT;
     		}
     		//TODO: set pop up to choose mission type, and parameters
-    		msg.command = 16;//MAVLink.MAV_CMD.MAV_CMD_NAV_WAYPOINT;	    		
+    		msg.command = 16;//MAVLink.MAV_CMD.MAV_CMD_NAV_WAYPOINT;
+    		if ( msg.seq == 1 ){
+    			msg.current = 1;
+    		}
     		msg.param1 = msg.param2 = msg.param3 = msg.param4 = 0; 
     		msg.autocontinue = 1;
     		
@@ -324,6 +347,5 @@ public class MissionOverlay extends ItemizedOverlay<OverlayItem> {
 		populate();
 
 	}
-	
 }
 

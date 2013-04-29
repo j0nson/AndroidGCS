@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, Setup!</string>
     <string name="app_name">Android GCS</string>
     
      <!--  DeviceListActivity -->
-    <string name="scanning">scanning for devices</string>
-    <string name="select_device">select a device to connect</string>
+    <string name="scanning">Scanning for devices</string>
+    <string name="select_device">Select a device to connect</string>
     <string name="none_paired">No devices have been paired</string>
     <string name="none_found">No devices found</string>
     <string name="title_paired_devices">Paired Devices</string>
@@ -28,24 +27,60 @@
 	<string name="enableWPDrag">Enable WP Drag</string>
 	<string name="disableWPDrag">Disable WP Drag</string>
 	<string name="checkForUpdates">http://usubscription.com/copterGCS.php</string>
+	<string name="speakWaypointReached">Speak Waypoint Reached</string>
+	<string name="speakModeChange">Speak Mode Change</string>
+	<string name="speakConnectionStatus">Speak Connection Status</string>
+	<string name="speakLowBattery">Speak Low Battery Warning</string>
+	<string name="speakWaypointNext">Speak Next Waypoint</string>
+	<string name="gpsOnMission">Keep GPS On in Mission Planner</string>
+	<string name="keepScreenOn">Keep Screen Awake</string>
+	<string name="telemetryProtocol">Telemetry Protocol</string>
+	<string name="linkType">Link Type</string>
+	<string name="orientation">Orientation</string>
+	<string name="kmlLog">Log to KML File</string>
+	<string name="tlog">Log to tlog File</string>
+	<string name="speakStatusMessage">Speak UAV Status Messages</string>
 	
      <string-array name="mode_array">
-        <item>Manual</item>      
-        <item>Circle</item>
-        <item>Stabilize</item>
-        <item>Training</item>      
-        <item>Four</item>
-        <item>Fly by Wire A</item>
-        <item>Fly by Wire B</item>
-        <item>Seven</item>
-        <item>Eight</item>
-        <item>Nine</item>
-        <item>Auto</item>
-        <item>Return to Launch</item>
-        <item>Loiter</item>
-        <item>Guided</item>
+        <item>Manual</item>  				<!-- 0 -->    
+        <item>Circle</item>  				<!-- 1 --> 
+        <item>Stabilize</item>  			<!-- 2 --> 
+        <item>Training</item>   			<!-- 3 -->      
+      	<item>Empty</item> 					
+        <item>Fly by Wire A</item>  		<!-- 5 --> 
+        <item>Fly by Wire B</item>  		<!-- 6 --> 
+      	<item>Empty</item>	
+      	<item>Empty</item>		
+      	<item>Empty</item>		
+        <item>Auto</item>  					<!-- 10 --> 
+        <item>Return to Launch</item>  		<!-- 11 --> 
+        <item>Loiter</item>  				<!-- 12 --> 
+        <item>Guided</item>  				<!-- 13 --> 
     </string-array>
-    <!-- 0	 Manual,1	 CIRCLE,2	 STABILIZE,3	 TRAINING,5	 FBWA,6	 FBWB,10	 Auto,11	 RTL,12	 Loiter,15	 Guided -->
+
+    <string-array name="paramsWP_waypoint">
+        <item>Lat</item>
+        <item>Lon</item>
+        <item>Pause</item>
+        <item>4</item>
+    </string-array>
+    
+    <string-array name="mode_array_copter">
+        <item>Stabilize</item> 				<!-- 0 -->      
+        <item>Acro</item>  					<!-- 1 --> 
+        <item>Alt Hold</item>  				<!-- 2 --> 
+        <item>Auto</item>        			<!-- 3 --> 
+        <item>Guided</item>  				<!-- 4 --> 
+        <item>Loiter</item>  				<!-- 5 --> 
+        <item>Return to Launch</item>  		<!-- 6 --> 
+        <item>Circle</item>  				<!-- 7 --> 
+        <item>Position</item>  				<!-- 8 --> 
+        <item>Land</item>  					<!-- 9 --> 
+        <item>O.F. Loiter</item>  			<!-- 10 --> 
+        <item>Toy Auto</item>  				<!-- 11 --> 
+        <item>Toy Manual</item>  			<!-- 12 --> 
+    </string-array>
+    
     <string-array name="battery_modes">
         <item>Disabled</item>      
         <item>3 Cell</item>

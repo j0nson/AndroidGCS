@@ -54,8 +54,6 @@ public class MissionListActivity extends Activity implements OnItemClickListener
         dialog.setCancelable(true);
 		dialog.show();
 		dialog.setOnDismissListener(this);
-		
-		
 	}
 
 	public boolean onItemLongClick(AdapterView<?> paramAdapterView, View paramView, final int paramInt, long paramLong) {

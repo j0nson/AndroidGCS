@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,7 +33,9 @@ public class ParameterViewActivity extends Activity {
 	    super.onCreate(savedInstanceState);
 		if( CommonSettings.setOrientation(this, -1))
 			return;
-
+		//set audio stream controls
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+				
 	    setContentView(R.layout.parameter_view);
 	    
 	    listView = (ExpandableListView) findViewById(R.id.gridview);
@@ -43,6 +48,10 @@ public class ParameterViewActivity extends Activity {
         listView.setAdapter(adapter);       
         ba.init();
         
+        SharedPreferences settings = getSharedPreferences(CommunicationClient.PREFS_NAME, 0);
+      	if ( settings.getBoolean(getString(R.string.keepScreenOn), true) ){
+      		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+      	}
 	}
 	
 	class paramInfo{

@@ -4,12 +4,18 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.MAVLink.MAVLink;
@@ -50,11 +56,25 @@ public class GPSActivity extends MapActivity{
 	private int offsetX;
 	private int offsetY;
 	
+	private TextView mapMode;
+		
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
-		if( CommonSettings.setOrientation(this, -1))
+	    if( CommonSettings.setOrientation(this, -1)){
 			return;
-
+		}else{
+			switch (this.getResources().getConfiguration().orientation){
+				case Configuration.ORIENTATION_PORTRAIT:
+					this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+					break;
+				case Configuration.ORIENTATION_LANDSCAPE:
+					this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+					break;
+			}
+		}
+		//set audio stream controls
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+				
 	    setContentView(R.layout.gps_view);
 	    
 	    mapView = (MapView) findViewById(R.id.mapview);
@@ -89,6 +109,10 @@ public class GPSActivity extends MapActivity{
 
 	    ba.init();
 	    
+	    SharedPreferences settings = getSharedPreferences(CommunicationClient.PREFS_NAME, 0);
+	  	if ( settings.getBoolean(getString(R.string.keepScreenOn), true) ){
+	  		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+	  	}
 	}
 		
 	@Override
@@ -119,20 +143,26 @@ public class GPSActivity extends MapActivity{
 	    		enableGCSOffsetMode = !enableGCSOffsetMode;
 	    		
 	    		//TODO conditional on the accuracy
-	    		
-	    		if(lastCopter != null && enableGCSOffsetMode){
+	    		mapMode = (TextView) findViewById(R.id.mapMode);
+	    		if(lastCopter == null){
+	    			Toast toast=Toast.makeText(this, "No GPS Fix", Toast.LENGTH_LONG);
+	    		    toast.setGravity(Gravity.TOP, 0, 50);
+	    		    toast.show();
+	    		}else if(lastCopter != null && enableGCSOffsetMode){
+	    			mapMode.setText("Follow Me On");
 	    			GeoPoint phone = phoneLocationOverlay.getMyLocation();
 	    			offsetX = lastCopter.getLatitudeE6() - phone.getLatitudeE6();
 		    		offsetY = lastCopter.getLongitudeE6() - phone.getLongitudeE6();
 		    		
-	    			Toast toast=Toast.makeText(this, "Enabled GCS OffsetMode", Toast.LENGTH_LONG);
+	    			Toast toast=Toast.makeText(this, "Follow Me Enabled", Toast.LENGTH_LONG);
 	    		    toast.setGravity(Gravity.TOP, 0, 50);
 	    		    toast.show();
 	    		    
 		    		item.setTitle(R.string.disableFollowMe);
 	    		}else{
+	    			mapMode.setText("");
 	    			enableGCSOffsetMode = false;
-	    			Toast toast=Toast.makeText(this, "Disabled GCS OffsetMode", Toast.LENGTH_LONG);
+	    			Toast toast=Toast.makeText(this, "Follow Me Disabled", Toast.LENGTH_LONG);
 	    		    toast.setGravity(Gravity.TOP, 0, 50);
 	    		    toast.show();
 	    		    
@@ -143,13 +173,15 @@ public class GPSActivity extends MapActivity{
 	    		
 	    	case R.id.menu_set_loiter:
 	    		enableLoiterSet = !enableLoiterSet;
-	    		
+	    		mapMode = (TextView) findViewById(R.id.mapMode);
 	    		if(enableLoiterSet){
+	    			mapMode.setText("Guided Mode On");
 	    			Toast toast=Toast.makeText(this, "Enabled Guided Goto", Toast.LENGTH_LONG);
 	    		    toast.setGravity(Gravity.TOP, 0, 50);
 	    		    toast.show();
 	    		    item.setTitle(R.string.disableLoiterSet);
 	    		}else{
+	    			mapMode.setText("");
 	    			Toast toast=Toast.makeText(this, "Disabled Guided Goto", Toast.LENGTH_LONG);
 	    		    toast.setGravity(Gravity.TOP, 0, 50);
 	    		    toast.show();
@@ -222,18 +254,17 @@ public class GPSActivity extends MapActivity{
 			}else{
 				switch(m.messageType){
 					case msg_gps_raw_int.MAVLINK_MSG_ID_GPS_RAW_INT:{
-						//Toast.makeText(getApplicationContext(), "GPS_RAW_INT", Toast.LENGTH_SHORT).show();
 						msg_gps_raw_int msg = (msg_gps_raw_int) m;
-		
+						
 						if( msg.fix_type > 1){
 							GeoPoint point = new GeoPoint((int)(msg.lat/10), (int)(msg.lon/10));
 							itemizedoverlay.setCopterOverlay(new OverlayItem(point, "UAV", "Current Location"));
 							
 							lastAltitude  = msg.alt;
 							lastCopter = new GeoPoint((int)(msg.lat/10),((int)(msg.lon/10)));
-
+							
 							pathOverlay.addNewLocation( point, (int) msg.alt);
-
+							
 							mapView.postInvalidate();
 
 							if(firstGPS){
@@ -249,7 +280,7 @@ public class GPSActivity extends MapActivity{
 								msg1.x = ((float)phone.getLatitudeE6() + offsetX)/ 1000000.0f ;
 								msg1.y = ((float)phone.getLongitudeE6()+ offsetY)/ 1000000.0f ;
 								msg1.z = lastAltitude;
-								
+								//Toast.makeText(getApplicationContext(), " " + msg1.y, Toast.LENGTH_SHORT).show();
 								guidedModeOverlay.setGotoPoint(new GeoPoint((int)(msg1.x * 1000000), (int)(msg1.y*1000000)));
 								ba.sendBytesToComm(MAVLink.createMessage(msg1));
 								

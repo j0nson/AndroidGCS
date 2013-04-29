@@ -2,9 +2,13 @@ package com.bvcode.ncopter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnLongClickListener;
 import android.widget.TextView;
 
@@ -25,13 +29,16 @@ import com.bvcode.ncopter.comms.CommunicationClient;
 public class StatusActivity extends Activity implements OnLongClickListener{
 
 	TextView[] lines;
+	private int lastMode = 100;
 	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.status_main);
 		if( CommonSettings.setOrientation(this, -1))
 			return;
-		
+		//set audio stream controls
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+				
 		lines = new TextView[18];
 		lines[0] = (TextView) findViewById(R.id.line1);
 		lines[1] = (TextView) findViewById(R.id.line2);
@@ -56,6 +63,11 @@ public class StatusActivity extends Activity implements OnLongClickListener{
 			lines[i].setOnLongClickListener(this);
 		
 		ba.init();
+		
+		SharedPreferences settings = getSharedPreferences(CommunicationClient.PREFS_NAME, 0);
+		if ( settings.getBoolean(getString(R.string.keepScreenOn), true) ){
+			getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+		}
 	}
 			
 	
@@ -121,94 +133,40 @@ public class StatusActivity extends Activity implements OnLongClickListener{
 
 		@Override
 		public void notifyReceivedData(int count, IMAVLinkMessage m) {
-			
 			if( CommonSettings.isProtocolAC1()){
 				if( StringMessage.class.isInstance(m)){
 					StringMessage sm = (StringMessage)m;
 					updateStatusLine(count, sm.message);
-				
 				}
 				
 			}else if(CommonSettings.isProtocolMAVLink()){
-				Log.v("Status Activity:", m.getClass().getName());
-				
+				//Log.v("Status Activity:", m.getClass().getName());
 				switch(m.messageType){
 					case msg_sys_status.MAVLINK_MSG_ID_SYS_STATUS:{
 						msg_sys_status msg = (msg_sys_status) m;
-						
-						//TODO		
-						//updateStatusLine(0, "NAV Mode: " + MAVLink.getNav(msg.nav_mode));
-						//updateStatusLine(1, "Status: " + MAVLink.getState(msg.status));
-						//if( msg.mode < 100)
-						//	updateStatusLine(2, "Mode: " + MAVLink.getMode(msg.mode));
-						//else
-						//	updateStatusLine(2, "Mode: " + getAC2Mode(msg.mode));
-						
-						updateStatusLine(9, "Packet Drops: " + (float)(msg.drop_rate_comm)/1000.0);
+						updateStatusLine(9, "Battery Voltage: " + ( msg.voltage_battery / 1000.0 ) + "v");
+						updateStatusLine(10, "Battery Remaining: " + msg.battery_remaining + "%");
+						updateStatusLine(11, "Battery Current: " + ( msg.current_battery / 100.0) + "A" );
+						//updateStatusLine(12, "Packet Drops: " + (float)(msg.drop_rate_comm)/1000.0);
 						break;
-						
 					}
 					case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:{
 						msg_heartbeat msg = (msg_heartbeat) m;
-						
-						switch((int)msg.custom_mode){
-						case 0:
-							updateStatusLine(0, "Mode: " + "Manual");
-							break;
-						case 1:
-							updateStatusLine(0, "Mode: " + "Circle");					
-							break;
-						case 2:
-							updateStatusLine(0, "Mode: " + "Stabilize");					
-							break;
-						case 3:
-							updateStatusLine(0, "Mode: " + "Training");					
-							break;
-						case 5:
-							updateStatusLine(0, "Mode: " + "FBW-A");					
-							break;
-						case 6:
-							updateStatusLine(0, "Mode: " + "FBW-B");					
-							break;
-						case 10:
-							updateStatusLine(0, "Mode: " + "Auto");					
-							break;
-						case 11:
-							updateStatusLine(0, "Mode: " + "Return to Launch");					
-							break;
-						case 12:
-							updateStatusLine(0, "Mode: " + "Loiter");					
-							break;
-						case 15:
-							updateStatusLine(0, "Mode: " + "Guided");					
-							break;
-						default:
-							updateStatusLine(0, "Mode: " + msg.custom_mode);					
-							break;
-						
-						}
-						//Navigation mode 0: manual, 2: stabilize, 5: FBW, 11: return to launch, 10: auto
-						//0	 Manual,1	 CIRCLE,2	 STABILIZE,3	 TRAINING,5	 FBWA,6	 FBWB,10	 Auto,11	 RTL,12	 Loiter,15	 Guided -->
-						//MAV_MODE_PREFLIGHT=0; //, * System is not ready to fly, booting, calibrating, etc. No flag is set. | *
-						//MAV_MODE_MANUAL_DISARMED=64; //, * System is allowed to be active, under manual (RC) control, no stabilization | *
-						//MAV_MODE_TEST_DISARMED=66; //, * UNDEFINED mode. This solely depends on the autopilot - use with caution, intended for developers only. | *
-						//MAV_MODE_STABILIZE_DISARMED=80; //, * System is allowed to be active, under assisted RC control. | *
-						//MAV_MODE_GUIDED_DISARMED=88; //, * System is allowed to be active, under autonomous control, manual setpoint | *
-						//MAV_MODE_AUTO_DISARMED=92; //, * System is allowed to be active, under autonomous control and navigation (the trajectory is decided onboard and not pre-programmed by MISSIONs) | *
-						//MAV_MODE_MANUAL_ARMED=192; //, * System is allowed to be active, under manual (RC) control, no stabilization | *
-						//MAV_MODE_TEST_ARMED=194; //, * UNDEFINED mode. This solely depends on the autopilot - use with caution, intended for developers only. | *
-						//MAV_MODE_STABILIZE_ARMED=208; //, * System is allowed to be active, under assisted RC control. | *
-						//MAV_MODE_GUIDED_ARMED=216; //, * System is allowed to be active, under autonomous control, manual setpoint | *
-						//MAV_MODE_AUTO_ARMED=220; //, * System is allowed to be active, under autonomous control and navigation (the trajectory is decided onboard and not pre-programmed by MISSIONs) | *
-						
-						//updateStatusLine(0, "Nav Mode: " + MAVLink.getState(msg.base_mode));
-						break;
-					}
-					case msg_gps_status.MAVLINK_MSG_ID_GPS_STATUS:{
-						//msg_gps_status msg = (msg_gps_status) m;
-						//updateStatusLine(1, "GPS Sats Vis: " + MAVLink.getState(msg.satellites_visible));
-						//msg_gps_status msg = (msg_gps_status) m;
-						
+				    	if ((int)msg.custom_mode != lastMode){
+				    		Resources res = getResources();
+							String[] mavModes = null;
+							if ( CommonSettings.uavType == 2){ //quad
+								mavModes = res.getStringArray(R.array.mode_array_copter);
+							}else { // if ( CommonSettings.uavType == 1){ //fixed wing
+								mavModes = res.getStringArray(R.array.mode_array);
+							}
+				    		if ( msg.custom_mode <= mavModes.length ){
+				    			updateStatusLine(0, "Mode: " + mavModes[(int)msg.custom_mode]);
+				    		}else{
+				    			updateStatusLine(0, "Mode: " + (int)msg.custom_mode);
+				    		}
+				    		lastMode = (int)msg.custom_mode;
+				    	}
 						break;
 					}
 					case msg_waypoint_current.MAVLINK_MSG_ID_WAYPOINT_CURRENT:{
@@ -233,8 +191,7 @@ public class StatusActivity extends Activity implements OnLongClickListener{
 						}
 						updateStatusLine(5, "Latitude: " + (float)(msg.lat)/10000000.0);
 						updateStatusLine(6, "Longitude: " + (float)(msg.lon)/10000000.0);
-						updateStatusLine(7, "Altitude: " + (int)((msg.alt)/328.084));
-						//updateStatusLine(8, "GPS Heading: " + msg.hdg);
+						updateStatusLine(7, "Altitude: " + (msg.alt / 1000) + "m");
 						break;
 					}
 					case msg_nav_controller_output.MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:{
@@ -242,7 +199,6 @@ public class StatusActivity extends Activity implements OnLongClickListener{
 						updateStatusLine(8, "Nav Bearing: " + msg.nav_bearing);
 						break;
 					}
-					
 				}				
 			}			
 		}

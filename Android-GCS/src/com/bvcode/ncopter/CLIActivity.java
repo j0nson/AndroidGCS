@@ -1,9 +1,12 @@
 package com.bvcode.ncopter;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +29,9 @@ public class CLIActivity extends Activity implements OnClickListener {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		//set audio stream controls
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+				
 		setContentView(R.layout.cli_view);
 		//buffer = (EditText) findViewById(R.id.cli_text);
 		buffer = (TextView) findViewById(R.id.cli_text);
@@ -40,7 +45,10 @@ public class CLIActivity extends Activity implements OnClickListener {
 		ProtocolParser.setPassThrough(true);
         ba.init();
         
-        
+        SharedPreferences settings = getSharedPreferences(CommunicationClient.PREFS_NAME, 0);
+      	if ( settings.getBoolean(getString(R.string.keepScreenOn), true) ){
+      		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+      	}
 	}
 	
 	@Override

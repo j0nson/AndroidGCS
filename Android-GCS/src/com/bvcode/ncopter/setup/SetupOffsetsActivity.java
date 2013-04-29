@@ -2,6 +2,7 @@ package com.bvcode.ncopter.setup;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,7 +33,9 @@ public class SetupOffsetsActivity extends Activity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.setup_offsets);
-			
+		//set audio stream controls
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+						
 		roll = (NumberPicker) findViewById(R.id.rollOffset);
 		roll.setRange(2000, 3000);
 		pitch = (NumberPicker) findViewById(R.id.pitchOffset);

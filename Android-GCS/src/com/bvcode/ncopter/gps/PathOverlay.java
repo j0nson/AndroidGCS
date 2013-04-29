@@ -29,7 +29,7 @@ public class PathOverlay extends Overlay{
 		
 		// Draw the rest
 		Paint paint = new Paint();
-		paint.setColor(Color.BLACK);
+		paint.setColor(Color.GREEN);
 		paint.setAntiAlias(false);
 		paint.setStyle(Paint.Style.STROKE);
 		paint.setStrokeWidth(5);

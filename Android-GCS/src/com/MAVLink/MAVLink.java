@@ -1,6 +1,9 @@
 package com.MAVLink;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import com.MAVLink.Messages.IMAVLinkMessage;
 
@@ -21,7 +24,6 @@ public class MAVLink {
                 //for( int i = 0; i < valueName.length(); i++)
                 //        name[i] = valueName.charAt(i);
                 //return name;
-
         }
 
      public static String convertIntNameToString(char[] param_id) {
@@ -64,6 +66,7 @@ public class MAVLink {
             init();
 
     }
+    
 	public class MAV_AUTOPILOT{
 		public final static int MAV_AUTOPILOT_GENERIC=0; //, * Generic autopilot, full support for everything | *
 		public final static int MAV_AUTOPILOT_PIXHAWK=1; //, * PIXHAWK autopilot, http:
@@ -196,7 +199,7 @@ public class MAVLink {
 		public final static int MAV_FRAME_MISSION=2; //, * NOT a coordinate frame, indicates a mission command. | *
 		public final static int MAV_FRAME_GLOBAL_RELATIVE_ALT=3; //, * Global coordinate frame, WGS84 coordinate system, relative altitude over ground with respect to the home position. First value 
 		public final static int MAV_FRAME_LOCAL_ENU=4; //, * Local coordinate frame, Z-down (x: east, y: north, z: up) | *
-		public final static int MAV_FRAME_ENUM_END=5; //, *  | *
+		//public final static int MAV_FRAME_ENUM_END=5; //, *  | *
 	}
 
 	public class MAVLINK_DATA_STREAM_TYPE{
@@ -240,13 +243,13 @@ public class MAVLink {
 		public final static int MAV_CMD_NAV_LAND=21; /* Land at location |Empty| Empty| Empty| Desired yaw angle.| Latitude| Longitude| Altitude|  */
 		public final static int MAV_CMD_NAV_TAKEOFF=22; /* Takeoff from ground / hand |Minimum pitch (if airspeed sensor present), desired pitch without sensor| Empty| Empty| Yaw angle (if magnetometer present), ignored without magnetometer| Latitude| Longitude| Altitude|  */
 		public final static int MAV_CMD_NAV_ROI=80; /* Sets the region of interest (ROI) for a sensor set or the vehicle itself. This can then be used by the vehicles control system to control the vehicle attitude and the attitude of various sensors such as cameras. |Region of intereset mode. (see MAV_ROI enum)| MISSION index/ target ID. (see MAV_ROI enum)| ROI index (allows a vehicle to manage multiple ROI's)| Empty| x the location of the fixed ROI (see MAV_FRAME)| y| z|  */
-		public final static int MAV_CMD_NAV_PATHPLANNING=81; /* Control autonomous path planning on the MAV. |0: Disable local obstacle avoidance / local path planning (without resetting map), 1: Enable local path planning, 2: Enable and reset local path planning| 0: Disable full path planning (without resetting map), 1: Enable, 2: Enable and reset map/occupancy grid, 3: Enable and reset planned route, but not occupancy grid| Empty| Yaw angle at goal, in compass degrees, [0..360]| Latitude/X of goal| Longitude/Y of goal| Altitude/Z of goal|  */
-		public final static int MAV_CMD_NAV_LAST=95; /* NOP - This command is only used to mark the upper limit of the NAV/ACTION commands in the enumeration |Empty| Empty| Empty| Empty| Empty| Empty| Empty|  */
+		//public final static int MAV_CMD_NAV_PATHPLANNING=81; /* Control autonomous path planning on the MAV. |0: Disable local obstacle avoidance / local path planning (without resetting map), 1: Enable local path planning, 2: Enable and reset local path planning| 0: Disable full path planning (without resetting map), 1: Enable, 2: Enable and reset map/occupancy grid, 3: Enable and reset planned route, but not occupancy grid| Empty| Yaw angle at goal, in compass degrees, [0..360]| Latitude/X of goal| Longitude/Y of goal| Altitude/Z of goal|  */
+		//public final static int MAV_CMD_NAV_LAST=95; /* NOP - This command is only used to mark the upper limit of the NAV/ACTION commands in the enumeration |Empty| Empty| Empty| Empty| Empty| Empty| Empty|  */
 		public final static int MAV_CMD_CONDITION_DELAY=112; /* Delay mission state machine. |Delay in seconds (decimal)| Empty| Empty| Empty| Empty| Empty| Empty|  */
 		public final static int MAV_CMD_CONDITION_CHANGE_ALT=113; /* Ascend/descend at rate.  Delay mission state machine until desired altitude reached. |Descent / Ascend rate (m/s)| Empty| Empty| Empty| Empty| Empty| Finish Altitude|  */
 		public final static int MAV_CMD_CONDITION_DISTANCE=114; /* Delay mission state machine until within desired distance of next NAV point. |Distance (meters)| Empty| Empty| Empty| Empty| Empty| Empty|  */
 		public final static int MAV_CMD_CONDITION_YAW=115; /* Reach a certain target angle. |target angle: [0-360], 0 is north| speed during yaw change:[deg per second]| direction: negative: counter clockwise, positive: clockwise [-1,1]| relative offset or absolute angle: [ 1,0]| Empty| Empty| Empty|  */
-		public final static int MAV_CMD_CONDITION_LAST=159; /* NOP - This command is only used to mark the upper limit of the CONDITION commands in the enumeration |Empty| Empty| Empty| Empty| Empty| Empty| Empty|  */
+		//public final static int MAV_CMD_CONDITION_LAST=159; /* NOP - This command is only used to mark the upper limit of the CONDITION commands in the enumeration |Empty| Empty| Empty| Empty| Empty| Empty| Empty|  */
 		public final static int MAV_CMD_DO_SET_MODE=176; /* Set system mode. |Mode, as defined by ENUM MAV_MODE| Empty| Empty| Empty| Empty| Empty| Empty|  */
 		public final static int MAV_CMD_DO_JUMP=177; /* Jump to the desired command in the mission list.  Repeat this action only the specified number of times |Sequence number| Repeat count| Empty| Empty| Empty| Empty| Empty|  */
 		public final static int MAV_CMD_DO_CHANGE_SPEED=178; /* Change speed and/or throttle set points. |Speed type (0=Airspeed, 1=Ground Speed)| Speed  (m/s, -1 indicates no change)| Throttle  ( Percent, -1 indicates no change)| Empty| Empty| Empty| Empty|  */
@@ -265,11 +268,11 @@ public class MAVLink {
 		public final static int MAV_CMD_PREFLIGHT_CALIBRATION=241; /* Trigger calibration. This command will be only accepted if in pre-flight mode. |Gyro calibration: 0: no, 1: yes| Magnetometer calibration: 0: no, 1: yes| Ground pressure: 0: no, 1: yes| Radio calibration: 0: no, 1: yes| Empty| Empty| Empty|  */
 		public final static int MAV_CMD_PREFLIGHT_SET_SENSOR_OFFSETS=242; /* Set sensor offsets. This command will be only accepted if in pre-flight mode. |Sensor to adjust the offsets for: 0: gyros, 1: accelerometer, 2: magnetometer, 3: barometer, 4: optical flow| X axis offset (or generic dimension 1), in the sensor's raw units| Y axis offset (or generic dimension 2), in the sensor's raw units| Z axis offset (or generic dimension 3), in the sensor's raw units| Generic dimension 4, in the sensor's raw units| Generic dimension 5, in the sensor's raw units| Generic dimension 6, in the sensor's raw units|  */
 		public final static int MAV_CMD_PREFLIGHT_STORAGE=245; /* Request storage of different parameter values and logs. This command will be only accepted if in pre-flight mode. |Parameter storage: 0: READ FROM FLASH/EEPROM, 1: WRITE CURRENT TO FLASH/EEPROM| Mission storage: 0: READ FROM FLASH/EEPROM, 1: WRITE CURRENT TO FLASH/EEPROM| Reserved| Reserved| Empty| Empty| Empty|  */
-		public final static int MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN=246; /* Request the reboot or shutdown of system components. |0: Do nothing for autopilot, 1: Reboot autopilot, 2: Shutdown autopilot.| 0: Do nothing for onboard computer, 1: Reboot onboard computer, 2: Shutdown onboard computer.| Reserved| Reserved| Empty| Empty| Empty|  */
+		//public final static int MAV_CMD_PREFLIGHT_REBOOT_SHUTDOWN=246; /* Request the reboot or shutdown of system components. |0: Do nothing for autopilot, 1: Reboot autopilot, 2: Shutdown autopilot.| 0: Do nothing for onboard computer, 1: Reboot onboard computer, 2: Shutdown onboard computer.| Reserved| Reserved| Empty| Empty| Empty|  */
 		public final static int MAV_CMD_OVERRIDE_GOTO=252; /* Hold / continue the current action |MAV_GOTO_DO_HOLD: hold MAV_GOTO_DO_CONTINUE: continue with next item in mission plan| MAV_GOTO_HOLD_AT_CURRENT_POSITION: Hold at current position MAV_GOTO_HOLD_AT_SPECIFIED_POSITION: hold at specified position| MAV_FRAME coordinate frame of hold point| Desired yaw angle in degrees| Latitude / X position| Longitude / Y position| Altitude / Z position|  */
-		public final static int MAV_CMD_MISSION_START=300; /* start running a mission |first_item: the first mission item to run| last_item:  the last mission item to run (after this item is run, the mission ends)|  */
-		public final static int MAV_CMD_COMPONENT_ARM_DISARM=400; /* Arms / Disarms a component |1 to arm, 0 to disarm|  */
-		public final static int MAV_CMD_ENUM_END=401; /*  | */
+		//public final static int MAV_CMD_MISSION_START=300; /* start running a mission |first_item: the first mission item to run| last_item:  the last mission item to run (after this item is run, the mission ends)|  */
+		//public final static int MAV_CMD_COMPONENT_ARM_DISARM=400; /* Arms / Disarms a component |1 to arm, 0 to disarm|  */
+		//public final static int MAV_CMD_ENUM_END=401; /*  | */
 	}
 	
 	public class MAV_CMD_ACK{
@@ -371,13 +374,40 @@ public class MAVLink {
 		public final static int    MAV_ACTION_NB         = 43; //
 	}
 
+	public class MODES_ARDUPILOT{
+		public final static int    Manual=0;    
+		public final static int    Circle=1; 
+		public final static int    Stabilize=2; 
+		public final static int    Training=3;      					
+		public final static int    FBWA=5; 
+		public final static int    FBWB=6;	
+		public final static int    Auto=10;
+		public final static int    RTL=11; 
+		public final static int    Loiter=12;
+		public final static int    Guided=13; 
+	}
+	public class MODES_ARDUCOPTER{
+		public final static int    Stabilize=0;    
+		public final static int    Acro=1; 
+		public final static int    AltHold=2; 
+		public final static int    Auto=3;      					
+		public final static int    Guided=4; 
+		public final static int    Loiter=5;	
+		public final static int    RTL=6;
+		public final static int    Circle=7; 
+		public final static int    PotitionHold=8;
+		public final static int    Land=9; 
+		public final static int    OFLoiter=10;
+		public final static int    ToyAuto=11;
+		public final static int    ToyManual=12;
+	}
+	 
 	public static String getMavCmd(int a ){
 		return getMAVfield(MAV_CMD.class, a);
 	}
 	
 	public static String getMode(int i){
 		return getMAVfield(MAV_MODE.class, i);
-
 	}
 
 	public static String getState(int i){
@@ -418,7 +448,6 @@ public class MAVLink {
 			for (Field f : field) {
 				if (f.getInt(null) == a)
 					return f.getName();
-
 			}
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block

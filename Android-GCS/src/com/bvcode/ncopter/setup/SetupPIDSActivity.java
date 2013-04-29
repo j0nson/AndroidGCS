@@ -5,6 +5,7 @@ import java.util.Vector;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,10 +36,10 @@ import com.bvcode.ncopter.widgets.PIDWidget;
 public class SetupPIDSActivity extends Activity implements OnClickListener {
 
 	private static final String[] names_ac1 = {"Acro", "Stable", "Position", "Altitude"};
-	private static final byte[][] cmds = {ProtocolParser.requestAcroPIDs(),
-		  ProtocolParser.requestStablePIDs(),
-		  ProtocolParser.requestGPSPIDs(),
-		  ProtocolParser.requestAltitudePIDs()};
+	private static final byte[][] cmds = {	ProtocolParser.requestAcroPIDs(),
+		  									ProtocolParser.requestStablePIDs(),
+		  									ProtocolParser.requestGPSPIDs(),
+		  									ProtocolParser.requestAltitudePIDs()};
 
 	Button leftButton, rightButton, saveButton;
 	ViewFlipper vf;
@@ -60,6 +61,10 @@ public class SetupPIDSActivity extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
+		
+		//set audio stream controls
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+				
 		if( CommonSettings.isProtocolAC1()){
 			setupAC1();
 		
@@ -232,7 +237,7 @@ public class SetupPIDSActivity extends Activity implements OnClickListener {
 						break;
 					}
 				}
-				Log.v("gsd", m.getClass().getName());
+				//Log.v("gsd", m.getClass().getName());
 				
 			}
 		}
@@ -242,11 +247,12 @@ public class SetupPIDSActivity extends Activity implements OnClickListener {
 		
 			// structure: PageNAME_SUBunit_value 
 			String split[] =name.split("_"); 
-//			Log.d("gsd", name);
+			//Log.d("gsd", name);
 			if( split.length == 2){
-				if(name.contains("XTRACK") ){
-					split = new String[]{"XTRACK", split[0], split[1]};
-					
+				String value = split[1];				
+				if(value.equals("P") || value.equals("I") || value.equals("D") || value.equals("IMAX")){
+					split = new String[]{split[0], split[0], split[1]};
+					//Log.d("gsd split", name + " " + split[1]);
 				}				
 			}
 			
@@ -256,14 +262,13 @@ public class SetupPIDSActivity extends Activity implements OnClickListener {
 				String sub = split[1];
 				String value = split[2];
 				
-				if(!( value.equals("P") ||
-				  	  value.equals("I") ||
-					  value.equals("D") ||
-					  value.equals("IMAX") ))
+				if(!(pageName.equals("XTRK") || value.equals("P") || value.equals("I") || value.equals("D") || value.equals("IMAX"))){
 					return;
-				
+				}
+			//Log.d("gsd split", name + " " + split[1]);	
 				// Contruct or call up the layout
-				LinearLayout layout = null;				
+				LinearLayout layout = null;	
+				
 				if(!pages.containsKey(pageName)){
 					ScrollView s = new ScrollView(vf.getContext());
 					layout = new LinearLayout(s.getContext());
@@ -283,9 +288,9 @@ public class SetupPIDSActivity extends Activity implements OnClickListener {
 					tv.setText(pageName);
 					layout.addView(tv);
 					
-				}else
+				}else{
 					layout = pages.get(pageName);
-				
+				}
 				// Construct or callup the widget
 				PIDWidget pid;
 				if(!widgets.containsKey(pageName +"_" + sub)){

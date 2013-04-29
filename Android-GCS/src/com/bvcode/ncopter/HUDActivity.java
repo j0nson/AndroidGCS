@@ -2,8 +2,11 @@ package com.bvcode.ncopter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.MAVLink.MAVLink;
 import com.MAVLink.Messages.IMAVLinkMessage;
@@ -23,20 +26,26 @@ import com.bvcode.ncopter.comms.CommunicationClient;
 import com.bvcode.ncopter.widgets.HUD;
 
 public class HUDActivity extends Activity{
-
 	HUD hud;
+	private int lastMode = 100;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if( CommonSettings.setOrientation(this, -1))
 			return;
-		
+		//set audio stream controls
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+				
 		setContentView(R.layout.hud);
 
 		hud = (HUD) findViewById(R.id.hudWidget);
 		
         ba.init();
-    
+        
+        SharedPreferences settings = getSharedPreferences(CommunicationClient.PREFS_NAME, 0);
+      	if ( settings.getBoolean(getString(R.string.keepScreenOn), true) ){
+      		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+      	}
 	}
 	
 	@Override
@@ -113,14 +122,22 @@ public class HUDActivity extends Activity{
 				
 			}else if (CommonSettings.isProtocolMAVLink()){
 				switch(m.messageType){
-				
 					case msg_heartbeat.MAVLINK_MSG_ID_HEARTBEAT:{
-						Resources res = getResources();
-						String[] mavModes = res.getStringArray(R.array.mode_array);
-						
+						//Resources res = getResources();
+						//String[] mavModes = res.getStringArray(R.array.mode_array);
 						msg_heartbeat msg = (msg_heartbeat) m;
-						String mode = mavModes[(int)msg.custom_mode];
-						hud.setNavMode(mode);
+						if ((int)msg.custom_mode != lastMode){
+							Resources res = getResources();
+							String[] mavModes = null;
+							if ( CommonSettings.uavType == 2){ //quad
+								mavModes = res.getStringArray(R.array.mode_array_copter);
+							}else { // if ( CommonSettings.uavType == 1){ //fixed wing
+								mavModes = res.getStringArray(R.array.mode_array);
+							}
+							String mode = mavModes[(int)msg.custom_mode];
+							hud.setNavMode(mode);
+							lastMode = (int)msg.custom_mode;
+						}
 						break;
 					}
 					case msg_attitude.MAVLINK_MSG_ID_ATTITUDE:{
@@ -130,7 +147,7 @@ public class HUDActivity extends Activity{
 					}
 					case msg_sys_status.MAVLINK_MSG_ID_SYS_STATUS:{
 						msg_sys_status msg = (msg_sys_status) m;
-						hud.setBatteryRemaining(msg.battery_remaining/10.0);
+						hud.setBatteryRemaining(msg.battery_remaining);
 						hud.setbatteryMVolt(msg.voltage_battery);
 						break;
 					}	
@@ -147,7 +164,7 @@ public class HUDActivity extends Activity{
 					
 					case msg_gps_raw_int.MAVLINK_MSG_ID_GPS_RAW_INT:{
 						msg_gps_raw_int msg = (msg_gps_raw_int) m;
-						hud.setAltitude((int)(msg.alt/328.084));
+						hud.setAltitude((int)(msg.alt/1000));
 						String s;
 						switch(msg.fix_type){
 							case 0:
@@ -173,7 +190,6 @@ public class HUDActivity extends Activity{
 						break;
 					}
 					case msg_nav_controller_output.MAVLINK_MSG_ID_NAV_CONTROLLER_OUTPUT:{
-						
 						break;
 					}					
 				}				

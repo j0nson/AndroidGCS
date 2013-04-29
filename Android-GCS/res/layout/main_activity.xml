@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- new -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -117,28 +116,48 @@
 
 	<TextView
 	    android:id="@+id/extraInfo1"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
+	    android:layout_width="fill_parent"
+	    android:layout_height="20sp"
+	    android:maxLines="1"
 	    android:text=""
 	    android:textColor="#FFFFFF"
-	    android:textSize="20sp" />
+	    android:textSize="12sp" />
 
     <TextView
         android:id="@+id/extraInfo2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="20sp"
+        android:maxLines="1"
         android:text=""
         android:textColor="#FFFFFF"
-        android:textSize="20sp" />
+        android:textSize="12sp" />
     
     <TextView
         android:id="@+id/extraInfo3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="20sp"
+        android:maxLines="1"
         android:text=""
         android:textColor="#FFFFFF"
-        android:textSize="20sp" />
+        android:textSize="12sp" />
+    
+    <TextView
+        android:id="@+id/extraInfo4"
+        android:layout_width="fill_parent"
+        android:layout_height="20sp"
+        android:maxLines="1"
+        android:text=""
+        android:textColor="#FFFFFF"
+        android:textSize="12sp" />
+    
+    <TextView
+        android:id="@+id/extraInfo5"
+        android:layout_width="fill_parent"
+        android:layout_height="20sp"
+        android:maxLines="1"
+        android:text=""
+        android:textColor="#FFFFFF"
+        android:textSize="12sp" />
     
     <TextView
         android:id="@+id/connectLabel"
@@ -150,73 +169,3 @@
         android:textSize="30sp" />
 
 </LinearLayout>
-<!-- OLD 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent" android:layout_height="match_parent"
-	android:orientation="vertical">
-
-	<TextView android:text="" android:layout_height="wrap_content"
-		android:layout_width="fill_parent" />
-
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:orientation="horizontal" android:layout_weight="1" >
-
-		<Button android:text="Status" android:id="@+id/statusButton"
-			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:layout_weight="1" android:layout_marginLeft="20dip" />
-
-		<Button android:text="Readouts" android:id="@+id/readoutsButton"
-			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:layout_weight="1" android:layout_marginRight="20dip"/>
-	</LinearLayout>
-
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:orientation="horizontal" android:layout_weight="1" >
-
-		<Button android:text="GPS (Position)" android:id="@+id/gpsButton"
-			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:layout_weight="1" android:layout_marginLeft="20dip" />
-
-		<Button android:text="Mission Planning" android:id="@+id/missionButton"
-			android:layout_weight="1"
-			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:layout_marginRight="20dip" />
-	</LinearLayout>
-
-	<LinearLayout 	android:layout_width="fill_parent"
-					android:layout_height="fill_parent" 
-					android:orientation="horizontal" android:layout_weight="1" >
-		<Button android:text="HUD" android:id="@+id/hudButton"
-			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:layout_marginLeft="20dip" android:layout_weight="1" />
-		<Button android:text="Mode Selection" android:id="@+id/modeButton"
-			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:layout_marginRight="20dip" android:layout_weight="1" />
-	</LinearLayout>
-
-	<LinearLayout android:layout_width="fill_parent"
-		android:layout_height="fill_parent" android:orientation="horizontal" android:layout_weight="1" >
-		<Button android:text="Setup" android:id="@+id/buttonSetup"
-			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:layout_marginLeft="20dip" android:layout_weight="1" />
-		<Button android:text="MAVLink Params" android:id="@+id/paramView"
-			android:layout_width="fill_parent" android:layout_height="fill_parent"
-			android:layout_marginRight="20dip" android:layout_weight="1" />
-	</LinearLayout>
-
-	<TextView android:text="" android:textColor="#00FF00"
-		android:textSize="30sp" android:layout_height="wrap_content"
-		android:layout_width="wrap_content" android:layout_gravity="center_horizontal" />
-
-	<TextView android:text="Not Connected" android:textColor="#FF0000"
-		android:textSize="30sp" android:id="@+id/connectLabel"
-		android:layout_height="wrap_content" android:layout_width="wrap_content"
-		android:layout_gravity="center_horizontal" />
-
-	<TextView android:text="" android:textColor="#00FF00"
-		android:textSize="30sp" android:layout_height="wrap_content"
-		android:layout_width="wrap_content" android:layout_gravity="center_horizontal" />
-
-
-</LinearLayout>
--->
